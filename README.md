@@ -1,12 +1,20 @@
 # Python controller with pipewire
 
+[![PyPI Version][pypi-image]][pypi-url]
+[![Build Status][build-image]][build-url]
+[![Publish Status][publish-image]][publish-url]
+[![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pipewire_python.svg)][pypiversions-url]
+[![Code Coverage][coverage-image]][coverage-url]
+[![Code Quality][quality-image]][quality-url]
+
+
 Python controller, player and recorder via pipewire's commands
 
 - [Pipewire](https://gitlab.freedesktop.org/pipewire/pipewire) is a project that aims to greatly improve handling of audio and video under Linux. (Better than pulseaudio or jack)
 
 ## Requirements
 
-1. A pipewire version installed (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./INSTALL_PIPEWIRE.md):
+1. A pipewire version installed (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
 ```bash
 pw-cli info 0
 ```
@@ -39,6 +47,10 @@ pw-cli info 0
 *		mem.allow-mlock = "true"
 *		object.id = "0"
 ```
+> To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
+
+2.  Python 3.7+
+3.  Ubuntu 20.04+
 
 ## Tutorial
 
@@ -73,10 +85,9 @@ in the PipeWire daemon.
 - [ ] GUI controller
 
 
+> All APIS [here](https://docs.pipewire.org/page_api.html)
 
-All APIS [here](https://docs.pipewire.org/page_api.html)
-
-More info [here](https://gitlab.freedesktop.org/pipewire/pipewire/-/tree/master)
+> More info [here](https://gitlab.freedesktop.org/pipewire/pipewire/-/tree/master)
 
 ## Contributions
 
@@ -85,3 +96,18 @@ PR, FR and issues are welcome.
 ## License
 
 [LICENSE](./LICENSE.md)
+
+
+<!-- Badges -->
+
+[pypi-image]: https://img.shields.io/pypi/v/pipewire_python
+[pypi-url]: https://pypi.org/project/pipewire_python/
+[build-image]: https://github.com/pablodz/pipewire_python/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/pablodz/pipewire_python/actions/workflows/build.yml
+[publish-image]: https://github.com/pablodz/pipewire_python/actions/workflows/publish.yml/badge.svg
+[publish-url]: https://github.com/pablodz/pipewire_python/actions/workflows/publish.yml
+[coverage-image]: https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg
+[coverage-url]: https://codecov.io/gh/pablodz/pipewire_python
+[quality-image]: https://api.codeclimate.com/v1/badges/3130fa0ba3b7993fbf0a/maintainability
+[quality-url]: https://codeclimate.com/github/pablodz/pipewire_python
+[pypiversions-url]: https://pypi.python.org/pypi/pipewire_python/

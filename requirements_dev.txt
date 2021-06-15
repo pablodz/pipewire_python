@@ -1,0 +1,9 @@
+flit
+black
+coverage
+flake8
+mccabe
+mypy
+pylint
+pytest
+tox
