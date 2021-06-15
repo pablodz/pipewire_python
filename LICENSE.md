@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2021 pablodz
+Copyright (c) 2021 Pablo Diaz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+--------------------------------------------------------------
+All PipeWire source files are licensed under the MIT License.
+(see file COPYING for details)
+
+With the exception of:
+
+  libspa-alsa.so in spa/plugins/alsa, which contains LGPL code from
+                  Pulseaudio and is thus licensed as LGPL.
+
+  libjackserver.so which links against the GPL2 jack/control.h, which
+                  makes it GPL2

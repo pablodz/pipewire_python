@@ -1,0 +1,9 @@
+{
+    "play": ["pw-play","COMMAND_HERE"], 
+    "record": ["pw-record"],
+    "cat":"pw-cat",
+    "mon":"pw-mon",
+    "dot":"pw-dot",
+    "top":"pw-top",
+    "dump":"pw-dump"
+}
