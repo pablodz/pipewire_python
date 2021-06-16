@@ -2,7 +2,7 @@
 
 There are several tutorials on the Internet about installing Pipewire. However we recommend this method to avoid errors and unexpected things:
 
-    Disclaimer: Pipewire is under develop, methods may change over time and remember that this software is developed thinking on new distros versions.
+> Disclaimer: Pipewire is under develop, methods may change over time and remember that this software is developed thinking on new distros versions.
 
 ## Ubuntu +20.04
 
