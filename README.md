@@ -37,7 +37,15 @@ pw-cli info 0
 2.  Python 3.7+
 3.  Ubuntu 20.04+
 
-## Tutorial
+## Install & Tutorial
+
+### Install
+
+```bash
+pip3 install pipewire_python # or pip
+```
+
+### Tutorial
 
 ```python
 from pipewire_python.pipewirecontroller import Player
