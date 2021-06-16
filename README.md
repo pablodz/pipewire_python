@@ -29,23 +29,7 @@ pw-cli info 0
     version: "0.3.30" # Possibly more actual than this version
     name: "pipewire-0"
 *	properties:
-*		config.name = "pipewire.conf"
-*		link.max-buffers = "16"
-*		core.daemon = "true"
-*		core.name = "pipewire-0"
-*		cpu.max-align = "32"
-*		clock.power-of-two-quantum = "true"
-*		default.clock.rate = "48000"
-*		default.clock.quantum = "1024"
-*		default.clock.min-quantum = "32"
-*		default.clock.max-quantum = "8192"
-*		default.video.width = "640"
-*		default.video.height = "480"
-*		default.video.rate.num = "25"
-*		default.video.rate.denom = "1"
-*		mem.warn-mlock = "false"
-*		mem.allow-mlock = "true"
-*		object.id = "0"
+...[more]
 ```
 > To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
 
