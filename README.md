@@ -115,7 +115,7 @@ PR, FR and issues are welcome.
 
 ## License
 
-[LICENSE](./LICENSE.md)
+[LICENSE](./LICENSE)
 
 <!-- Badges -->
 
