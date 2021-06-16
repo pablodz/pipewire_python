@@ -1,8 +1,6 @@
 from pipewire_python.pipewirecontroller import Player
 import asyncio
 
-# Download sample audio
-
 #########################
 # PLAYBACK              #
 #########################

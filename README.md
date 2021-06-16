@@ -78,7 +78,7 @@ asyncio.run(player.record_wav_file_async('docs/5sec_record.wav',
 ## Pipewire's API implementation
 
 - [x] Play `pw-play`
-- [ ] Record `pw-record`
+- [x] Record `pw-record`
 - [ ] Cat `pw-cat`
 - [ ] JACK-servers `pw-jack`
 - [ ] `pw-mon` dumps and monitors the state of the PipeWire daemon
@@ -93,8 +93,8 @@ asyncio.run(player.record_wav_file_async('docs/5sec_record.wav',
 
 ## Availability
 
-- [ ] Pypi package
-- [ ] CI/CD implementation
+- [x] Pypi package
+- [x] CI/CD implementation
 - [ ] GUI controller
 
 > All APIS [here](https://docs.pipewire.org/page_api.html)
