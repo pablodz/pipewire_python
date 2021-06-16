@@ -2,6 +2,14 @@ import subprocess
 import json
 
 KEY_TO_REPLACE = "COMMAND_HERE"
+PIPEWIRE_API_COMMANDS = {"play": ["pw-play", "COMMAND_HERE"],
+                         "record": ["pw-record"],
+                         "cat": "pw-cat",
+                         "mon": "pw-mon",
+                         "dot": "pw-dot",
+                         "top": "pw-top",
+                         "dump": "pw-dump"
+                         }
 
 
 class Player:
@@ -10,8 +18,7 @@ class Player:
 
     def __init__(self):
 
-        with open("pipewire_python/pipewireAPICommands.json", "r") as json_file:
-            self.commands_json = json.load(json_file)
+        self.commands_json =PIPEWIRE_API_COMMANDS
 
     def play_WAV_File(self, audio_path):
         """

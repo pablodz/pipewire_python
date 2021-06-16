@@ -1,7 +1,7 @@
 """pipewire_python:
 Python controller, player and recorder via pipewire's commands"""
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 import sys
 
