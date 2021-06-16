@@ -33,7 +33,7 @@ pw-cli info 0
 ```
 > To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
 
-2.  Python 3.8+
+2.  Python 3.7+
 3.  Ubuntu 20.04+
 
 ## Tutorial
