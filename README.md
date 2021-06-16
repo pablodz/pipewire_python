@@ -7,7 +7,6 @@
 [![Code Coverage][coverage-image]][coverage-url]
 [![Code Quality][quality-image]][quality-url]
 
-
 Python controller, player and recorder via pipewire's commands
 
 - [Pipewire](https://gitlab.freedesktop.org/pipewire/pipewire) is a project that aims to greatly improve handling of audio and video under Linux. (Better than pulseaudio or jack)
@@ -15,9 +14,11 @@ Python controller, player and recorder via pipewire's commands
 ## Requirements
 
 1. A pipewire version installed (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
+
 ```bash
 pw-cli info 0
 ```
+
 ```bash
 # Example output
     id: 0
@@ -28,9 +29,9 @@ pw-cli info 0
     host-name: "user"
     version: "0.3.30" # Possibly more actual than this version
     name: "pipewire-0"
-*	properties:
-...[more]
+...
 ```
+
 > To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
 
 2.  Python 3.7+
@@ -40,34 +41,61 @@ pw-cli info 0
 
 ```python
 from pipewire_python.pipewirecontroller import Player
+import asyncio
 
-player=Player()
-player.play_WAV_File('docs/beers.wav')
+# Download sample audio
+
+#########################
+# PLAYBACK              #
+#########################
+# normal way
+player = Player()
+player.play_wav_file('docs/beers.wav',
+                     verbose=True)
+
+# async way
+player = Player()
+asyncio.run(player.play_wav_file_async('docs/beers.wav',
+                                       verbose=True))
+
+#########################
+# RECORD [default=5sec] #
+#########################
+
+# normal way
+player = Player()
+player.record_wav_file('docs/5sec_record.wav',
+                       verbose=True)
+
+# async way
+player = Player()
+asyncio.run(player.record_wav_file_async('docs/5sec_record.wav',
+                                         verbose=True))
+
 ```
 
 
 ## Pipewire's API implementation
 
-- [X] Play `pw-play`
+- [x] Play `pw-play`
 - [ ] Record `pw-record`
 - [ ] Cat `pw-cat`
 - [ ] JACK-servers `pw-jack`
 - [ ] `pw-mon` dumps and monitors the state of the PipeWire daemon
 - [ ] `pw-dot` can dump a graph of the pipeline, check out the help for
-how to do this.
+      how to do this.
 - [ ] `pw-top` monitors the real-time status of the graph. This is handy to
-find out what clients are running and how much DSP resources they
-use.
+      find out what clients are running and how much DSP resources they
+      use.
 - [ ] `pw-dump` dumps the state of the PipeWire daemon in JSON format. This
-can be used to find out the properties and parameters of the objects
-in the PipeWire daemon.
+      can be used to find out the properties and parameters of the objects
+      in the PipeWire daemon.
 
 ## Availability
 
 - [ ] Pypi package
 - [ ] CI/CD implementation
 - [ ] GUI controller
-
 
 > All APIS [here](https://docs.pipewire.org/page_api.html)
 
@@ -80,7 +108,6 @@ PR, FR and issues are welcome.
 ## License
 
 [LICENSE](./LICENSE.md)
-
 
 <!-- Badges -->
 
