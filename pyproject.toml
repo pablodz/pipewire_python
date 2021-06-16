@@ -6,7 +6,7 @@ build-backend = "flit_core.buildapi"
 module = "pipewire_python"
 author = "Pablo Diaz & Anna Absi"
 home-page = "https://github.com/pablodz/pipewire_python"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 description-file = "README.md"
 classifiers = [ "License :: OSI Approved :: MIT License",
                 "Intended Audience :: Developers",
@@ -14,7 +14,6 @@ classifiers = [ "License :: OSI Approved :: MIT License",
                 "Natural Language :: English",
                 "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
                 "Topic :: Multimedia :: Sound/Audio :: Players",
-                "Programming Language :: Python :: 3.7",
                 "Programming Language :: Python :: 3.8",
                 "Programming Language :: Python :: 3.9",
                 ]

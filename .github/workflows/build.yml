@@ -12,10 +12,10 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                python-version: [3.9, 3.8, 3.7]
+                python-version: [3.8, 3.9]
 
         env:
-            USING_COVERAGE: "3.9"
+            USING_COVERAGE: "3.8"
 
         steps:
             - name: Checkout sources
@@ -26,12 +26,9 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
 
-            - name: Install dependencies
+            - name: Install dependencies and run tox
               run: |
                   make deps
-
-            - name: Run tox
-              run: |
                   make tox
 
             - name: Upload coverage to Codecov
