@@ -83,31 +83,10 @@ asyncio.run(player.record_wav_file_async('docs/5sec_record.wav',
 ```
 
 
-## Pipewire's API implementation
+## ROADMAP
 
-- [x] Play `pw-play`
-- [x] Record `pw-record`
-- [ ] Cat `pw-cat`
-- [ ] JACK-servers `pw-jack`
-- [ ] `pw-mon` dumps and monitors the state of the PipeWire daemon
-- [ ] `pw-dot` can dump a graph of the pipeline, check out the help for
-      how to do this.
-- [ ] `pw-top` monitors the real-time status of the graph. This is handy to
-      find out what clients are running and how much DSP resources they
-      use.
-- [ ] `pw-dump` dumps the state of the PipeWire daemon in JSON format. This
-      can be used to find out the properties and parameters of the objects
-      in the PipeWire daemon.
+Future implementations, next steps, API implementation and Control over pipewire directly from python in the [ROADMAP](docs/ROADMAP.md).
 
-## Availability
-
-- [x] Pypi package
-- [x] CI/CD implementation
-- [ ] GUI controller
-
-> All APIS [here](https://docs.pipewire.org/page_api.html)
-
-> More info [here](https://gitlab.freedesktop.org/pipewire/pipewire/-/tree/master)
 
 ## Contributions
 
