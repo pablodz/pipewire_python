@@ -17,7 +17,7 @@ There are several tutorials on the Internet about installing Pipewire. However w
    
 2. Reboot your computer or laptop
 3. Install pipewire via PPA:<br> `sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream` <br> `sudo apt install pipewire`
-4. Install `pavucontrol` without pulseaudio: <br>`sudo apt-get install --no-install-recommends pavucontrol`
+4. [OPTIONAL] Install `pavucontrol` without pulseaudio: <br>`sudo apt-get install --no-install-recommends pavucontrol`
 5. Reboot and change configs in `pavucontrol` to `Pro Audio`
 
  ![](https://imgur.com/514XIgR.png)

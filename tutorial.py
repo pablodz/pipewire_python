@@ -1,4 +1,4 @@
-from pipewire_python.pipewirecontroller import Player
+from pipewire_python.controller import Player
 import asyncio
 
 #########################
