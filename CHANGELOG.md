@@ -1,4 +1,10 @@
-# 0.0.6 (2021-06-16)
+# v0.0.8
+
+Refactoring the whole driver
+
+ASYNC still not implemented
+
+# v0.0.6 (2021-06-16)
 
 ### Features
 
@@ -10,7 +16,7 @@
 - Record async not working
 
 
-# 0.0.2 (2021-06-15)
+# v0.0.2 (2021-06-15)
 
 ### Features
 

@@ -1,0 +1,7 @@
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=15
+# Maximum number of branch for function / method body
+max-branches=50
+# Maximum number of statements in function / method body
+max-statements=100
