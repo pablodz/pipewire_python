@@ -139,6 +139,49 @@ cython_debug/
 
 .vscode/
 
+# Audio formats 
+*.wav
+*.ogg
+*.mp3
+*.3gp
+*.aa
+*.aac
+*.aax
+*.act
+*.aiff
+*.alac
+*.amr
+*.ape
+*.au
+*.awb
+*.dss
+*.dvf
+*.flac
+*.gsm
+*.iklax
+*.ivs
+*.m4a
+*.m4b
+*.m4p
+*.nmf
+*.mpc
+*.msv
+*.oga
+*.mogg
+*.opus
+*.org
+*.ra
+*.rm
+*.raw
+*.rf64
+*.sln
+*.tta
+*.voc  
+*.vox  
+*.wma
+*.wv 
+*.webm 
+*.8svx 
+*.cda
 
-docs/*.wav
 !docs/beers.wav
