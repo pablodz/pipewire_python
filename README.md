@@ -4,8 +4,12 @@
 [![Build Status][build-image]][build-url]
 [![Publish Status][publish-image]][publish-url]
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pipewire_python.svg)][pypiversions-url]
-[![Code Coverage][coverage-image]][coverage-url]
-[![Code Quality][quality-image]][quality-url]
+[![codecov](https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg?token=VN6O9QK3ZH)](https://codecov.io/gh/pablodz/pipewire_python)
+
+<!--[![Code Quality][quality-image]][quality-url]-->
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/maintainability)](https://codeclimate.com/github/pablodz/pipewire_python/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/test_coverage)](https://codeclimate.com/github/pablodz/pipewire_python/test_coverage)
 
 Python controller, player and recorder via pipewire's commands
 
@@ -48,45 +52,27 @@ pip3 install pipewire_python # or pip
 ### Tutorial
 
 ```python
-from pipewire_python.pipewirecontroller import Player
-import asyncio
+from pipewire_python.controller import Controller
 
-# Download sample audio
+# [PLAYBACK]: normal way
+audio_controller = Controller(verbose=True)
+audio_controller.set_config(rate=384000,
+                            channels=2,
+                            _format='f64',
+                            volume=0.98,
+                            quality=4)
+audio_controller.playback(audio_filename='docs/beers.wav')
 
-#########################
-# PLAYBACK              #
-#########################
-# normal way
-player = Player()
-player.play_wav_file('docs/beers.wav',
-                     verbose=True)
-
-# async way
-player = Player()
-asyncio.run(player.play_wav_file_async('docs/beers.wav',
-                                       verbose=True))
-
-#########################
-# RECORD [default=5sec] #
-#########################
-
-# normal way
-player = Player()
-player.record_wav_file('docs/5sec_record.wav',
-                       verbose=True)
-
-# async way
-player = Player()
-asyncio.run(player.record_wav_file_async('docs/5sec_record.wav',
-                                         verbose=True))
+# [RECORD]: normal way
+audio_controller = Controller(verbose=True)
+audio_controller.record(audio_filename='docs/5sec_record.wav',
+                        timeout_seconds=5)
 
 ```
-
 
 ## ROADMAP
 
 Future implementations, next steps, API implementation and Control over pipewire directly from python in the [ROADMAP](docs/ROADMAP.md).
-
 
 ## Contributions
 
