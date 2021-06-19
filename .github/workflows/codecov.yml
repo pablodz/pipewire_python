@@ -1,0 +1,50 @@
+name: codecov
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  codecov-job:
+    runs-on: ubuntu-latest
+    # strategy:
+    #   matrix:
+    #     python-version:
+    #       - 3.9
+    # env:
+    #   PYTHON_FOR_COVERAGE: "3.9"
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install apt-dependencies
+        run: |
+          make apt-packages-ubuntu
+
+      - name: Install python-dependencies
+        run: |
+          make deps
+
+      - name: Run coverage
+        run: |
+          coverage erase
+          coverage run --include=pipewire_python/* -m pytest -v -ra
+          coverage report -m
+          coverage xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        # if: "contains(env.USING_COVERAGE, matrix.python-version)"
+        with:
+          files: ./coverage.xml
+          token: "${{ secrets.CODECOV_TOKEN }}"
+          fail_ci_if_error: true
+          verbose: true
