@@ -5,3 +5,7 @@ max-args=15
 max-branches=50
 # Maximum number of statements in function / method body
 max-statements=100
+# Unused import 
+disable=
+    W0611, # Conflicts with __all__ in doc (pdoc3)
+    C0303, # Conflicts with whitespace in doc
