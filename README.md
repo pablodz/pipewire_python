@@ -2,7 +2,8 @@
 
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
-[![Publish Status][publish-image]][publish-url]
+[![publish_docs](https://github.com/pablodz/pipewire_python/actions/workflows/publish_docs.yml/badge.svg)](https://github.com/pablodz/pipewire_python/actions/workflows/publish_docs.yml)
+[![publish_pypi](https://github.com/pablodz/pipewire_python/actions/workflows/publish_pypi.yml/badge.svg)](https://github.com/pablodz/pipewire_python/actions/workflows/publish_pypi.yml)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pipewire_python.svg)][pypiversions-url]
 [![codecov](https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg?token=VN6O9QK3ZH)](https://codecov.io/gh/pablodz/pipewire_python)
 
@@ -88,8 +89,6 @@ PR, FR and issues are welcome.
 [pypi-url]: https://pypi.org/project/pipewire_python/
 [build-image]: https://github.com/pablodz/pipewire_python/actions/workflows/build.yml/badge.svg
 [build-url]: https://github.com/pablodz/pipewire_python/actions/workflows/build.yml
-[publish-image]: https://github.com/pablodz/pipewire_python/actions/workflows/publish.yml/badge.svg
-[publish-url]: https://github.com/pablodz/pipewire_python/actions/workflows/publish.yml
 [coverage-image]: https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg
 [coverage-url]: https://codecov.io/gh/pablodz/pipewire_python
 [quality-image]: https://api.codeclimate.com/v1/badges/3130fa0ba3b7993fbf0a/maintainability
