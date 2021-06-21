@@ -5,8 +5,9 @@ to see something here in documentation html version.
 import subprocess
 import asyncio
 import re
+
 # Loading constants Constants.py
-from ._constants import (MESSAGES_ERROR)
+from ._constants import MESSAGES_ERROR
 
 
 def _print_std(
@@ -162,17 +163,18 @@ async def _execute_shell_command_async(
 def _generate_dict_list_targets(
     longstring: str,  # string output of shell
     # Debug
-    verbose:bool=False,
+    verbose: bool = False,
 ):
-    """Function that transform long string of list targets
+    """
+    Function that transform long string of list targets
     to a `dict`
     """
 
-    regex_id = r'(\d.*):'
+    regex_id = r"(\d.*):"
     regex_desc = r'description="([^"]*)"'
-    regex_prio = r'prio=(\d.*)'
-    regex_default_node = r'[*]\t(\d\d)'
-    regex_alsa_node = r'(alsa_[a-zA-Z].*)'
+    regex_prio = r"prio=(\d.*)"
+    regex_default_node = r"[*]\t(\d\d)"
+    regex_alsa_node = r"(alsa_[a-zA-Z].*)"
 
     results_regex_id = re.findall(regex_id, longstring)
     results_regex_desc = re.findall(regex_desc, longstring)
@@ -181,12 +183,14 @@ def _generate_dict_list_targets(
     results_regex_alsa_mode = re.findall(regex_alsa_node, longstring)
 
     mydict = {}
-    for idx in range(len(results_regex_id)):
-        mydict[results_regex_id[idx]] = {"description": results_regex_desc[idx],
-                                  "prior": results_regex_prio[idx]}
-    mydict['_list_nodes'] = results_regex_id
-    mydict['_node_default'] = results_regex_default_node
-    mydict['_alsa_node'] = results_regex_alsa_mode
+    for idx in enumerate(results_regex_id):
+        mydict[f"{results_regex_id[idx]}"] = {
+            "description": results_regex_desc[idx],
+            "prior": results_regex_prio[idx],
+        }
+    mydict["_list_nodes"] = results_regex_id
+    mydict["_node_default"] = results_regex_default_node
+    mydict["_alsa_node"] = results_regex_alsa_mode
 
     if verbose:
         print(mydict)

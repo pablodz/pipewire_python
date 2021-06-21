@@ -53,17 +53,18 @@ In the next pages you'll see documentation of each python component.
 import warnings
 
 # Loading internal functions
-from ._utils import (_drop_keys_with_none_values,
-                    _execute_shell_command,
-                    _generate_command_by_dict,
-                    _get_dict_from_stdout,
-                    _print_std, _update_dict_by_dict,
-                    _generate_dict_list_targets)
+from ._utils import (
+    _drop_keys_with_none_values,
+    _execute_shell_command,
+    _generate_command_by_dict,
+    _get_dict_from_stdout,
+    _print_std,
+    _update_dict_by_dict,
+    _generate_dict_list_targets,
+)
 
 # Loading constants Constants.py
-from ._constants import (MESSAGES_ERROR,
-                        RECOMMENDED_FORMATS,
-                        RECOMMENDED_RATES)
+from ._constants import MESSAGES_ERROR, RECOMMENDED_FORMATS, RECOMMENDED_RATES
 
 # [DEPRECATED] [FLAKE8] TO_AVOID_F401 PEP8
 # [DEPRECATED] https://stackoverflow.com/a/31079085/10491422
@@ -81,7 +82,7 @@ from ._constants import (MESSAGES_ERROR,
 # ]
 
 
-class Controller():
+class Controller:
     """
     Class that controls pipewire command line interface
     with shell commands, handling outputs, loading default
@@ -102,7 +103,8 @@ class Controller():
     }
 
     _pipewire_list_targets = {  # "--list-targets": None,
-
+        "list_playblack": None,
+        "list_record": None,
     }
 
     _pipewire_configs = {  # Configs
@@ -160,18 +162,19 @@ class Controller():
             print(self._pipewire_configs)
 
         # Load values of list targets
-        self.load_list_targets(mode='playback', verbose=verbose)
-        self.load_list_targets(mode='record', verbose=verbose)
+        self.load_list_targets(mode="playback", verbose=verbose)
+        self.load_list_targets(mode="record", verbose=verbose)
 
     def _help(self):
-        """Get pipewire command line help
-        """
+        """Get pipewire command line help"""
 
         raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
 
-    def get_version(self,
-                    verbose: bool = False
-                    ):
+    def get_version(
+        self,
+        # Debug
+        verbose: bool = False,
+    ):
         """Get version of pipewire installed on OS by executing the following
         code:
 
@@ -187,13 +190,16 @@ class Controller():
             - versions (list) : Versions of pipewire compiled
         """
 
-        mycommand = ['pw-cli', '--version']
+        mycommand = ["pw-cli", "--version"]
 
         if verbose:
             print(f"[mycommand]{mycommand}")
 
         stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-        versions = stdout.decode().split('\n')[1:]
+        versions = stdout.decode().split("\n")[1:]
+
+        self._pipewire_cli["--version"] = versions
+
         return versions
 
     def verbose(self):
@@ -296,7 +302,7 @@ class Controller():
     ):
         """Method that get args as variables and set them
         to the `json` parameter of the class `_pipewire_configs`,
-        then you can use in other method, such as `playback(...)` or 
+        then you can use in other method, such as `playback(...)` or
         `record(...)`. This method verifies values to avoid wrong
         settings.
 
@@ -304,12 +310,12 @@ class Controller():
             media_type : Set media type
             media_category : Set media category
             media_role : Set media role
-            target : Set node target 
+            target : Set node target
             latency : Set node latency *example=100ms
             rate : Set sample rate [8000,11025,16000,22050,44100,48000,88200,96000,176400,192000,352800,384000]
             channels : Numbers of channels [1,2]
             channels_map : ["stereo", "surround-51", "FL,FR", ...]
-            _format : ["u8", "s8", "s16", "s32", "f32", "f64"] 
+            _format : ["u8", "s8", "s16", "s32", "f32", "f64"]
             volume : Stream volume [0.000, 1.000]
             quality : Resampler quality [0, 15]
             verbose (`bool`): True enable debug logs. *default=False
@@ -453,16 +459,18 @@ class Controller():
         the output to select a device to playback or record.
         """
 
-        if mode == 'playback':
-            mycommand = ['pw-cat', '--playback', '--list-targets']
+        if mode == "playback":
+            mycommand = ["pw-cat", "--playback", "--list-targets"]
             stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-            self._pipewire_list_targets['list_playblack'] = _generate_dict_list_targets(longstring=stdout.decode(),
-                                                                                        verbose=verbose)
-        elif mode == 'record':
-            mycommand = ['pw-cat', '--record', '--list-targets']
+            self._pipewire_list_targets["list_playblack"] = _generate_dict_list_targets(
+                longstring=stdout.decode(), verbose=verbose
+            )
+        elif mode == "record":
+            mycommand = ["pw-cat", "--record", "--list-targets"]
             stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-            self._pipewire_list_targets['list_record'] = _generate_dict_list_targets(longstring=stdout.decode(),
-                                                                                     verbose=verbose)
+            self._pipewire_list_targets["list_record"] = _generate_dict_list_targets(
+                longstring=stdout.decode(), verbose=verbose
+            )
         else:
             raise AttributeError(MESSAGES_ERROR["ValueError"])
 
@@ -601,7 +609,7 @@ class Controller():
         # Debug
         verbose: bool = False,
     ):
-        """[⚠️NOT IMPLEMENTED YET] 
+        """[⚠️NOT IMPLEMENTED YET]
         Function to stop process running under pipewire.
         Example: pw-cat process
         """
