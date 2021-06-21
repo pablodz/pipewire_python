@@ -3,7 +3,7 @@ Pipewire Controller:
 Python version, player and recorder via pipewire's commands
 """
 
-__version__ = "0.0.86"
+__version__ = "0.0.89"
 
 import sys
 

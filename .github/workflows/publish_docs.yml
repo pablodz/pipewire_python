@@ -10,6 +10,9 @@ jobs:
     steps:
       - name: checkout repo content
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -25,16 +28,14 @@ jobs:
         run: |
           python -m pdoc pipewire_python/ --docformat google --output-directory docs/html/ --edit-url pipewire_python=https://github.com/pablodz/pipewire_python/tree/main/pipewire_python/
 
-      - name: commit the daily updates
+      - name: commit files
         run: |
-          git pull          
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git commit --allow-empty -m "pdoc updated to latest release" -a
 
-      - name: push my changes
-        uses: ad-m/github-push-action@v0.6.0
+      - name: push changes
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          branch: ${{ github.ref }}
