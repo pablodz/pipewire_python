@@ -1,4 +1,4 @@
-# Python controller with pipewire
+# PIPEWIRE's python controller
 
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
@@ -6,9 +6,6 @@
 [![publish_pypi](https://github.com/pablodz/pipewire_python/actions/workflows/publish_pypi.yml/badge.svg)](https://github.com/pablodz/pipewire_python/actions/workflows/publish_pypi.yml)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pipewire_python.svg)][pypiversions-url]
 [![codecov](https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg?token=VN6O9QK3ZH)](https://codecov.io/gh/pablodz/pipewire_python)
-
-<!--[![Code Quality][quality-image]][quality-url]-->
-
 [![Maintainability](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/maintainability)](https://codeclimate.com/github/pablodz/pipewire_python/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/test_coverage)](https://codeclimate.com/github/pablodz/pipewire_python/test_coverage)
 
@@ -71,7 +68,11 @@ audio_controller.record(audio_filename='docs/5sec_record.wav',
 
 ```
 
-## ROADMAP
+## Documentation
+
+You can check the automatic builded documentation [HERE](https://pablodz.github.io/pipewire_python/html/)
+
+## Roadmap
 
 Future implementations, next steps, API implementation and Control over pipewire directly from python in the [ROADMAP](docs/ROADMAP.md).
 

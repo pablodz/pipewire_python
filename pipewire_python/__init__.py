@@ -45,7 +45,7 @@ pip3 install pipewire_python # or pip
 Tutorial [here](https://github.com/pablodz/pipewire_python/blob/main/README.py)
 """
 
-__version__ = "0.0.90"
+__version__ = "0.0.91"
 
 import sys
 

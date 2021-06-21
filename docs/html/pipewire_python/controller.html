@@ -28,9 +28,6 @@
 
                     <h2>Contents</h2>
                     <ul>
-  <li><a href="#description">Description</a></li>
-  <li><a href="#install-via">Install via</a></li>
-  <li><a href="#tutorial">Tutorial</a></li>
   <li><a href="#documentation">Documentation</a></li>
 </ul>
 
@@ -90,109 +87,19 @@
                     <h1 class="modulename">
 <a href="./../pipewire_python.html">pipewire_python</a><wbr>.controller    </h1>
 
-                        <div class="docstring"><h2 id="description">Description</h2>
+                        <div class="docstring"><h2 id="documentation">Documentation</h2>
 
-<p><a href="https://pipewire.org/">PIPEWIRE</a> provides a low-latency, graph based processing engine
-on top of audio and video devices that can be used to
-support the use cases currently handled by both pulseaudio
-and JACK. PipeWire was designed with a powerful security model
-that makes interacting with audio and video devices from 
-containerized applications easy, with supporting Flatpak
-applications being the primary goal. Alongside Wayland and
-Flatpak we expect PipeWire to provide a core building block 
-for the future of Linux application development.</p>
-
-<p><a href="https://pypi.org/project/pipewire_python/">pipewire_python</a> 
-controlls <code>pipewire</code> via terminal, creating shell commands and executing them as required.</p>
-
-<p>🎹 There are two ways to manage the python package:</p>
-
-<ol>
-<li><p>NO_ASYNC: this way works as expected with delay time between 
-<code><a href="../pipewire_python.html">pipewire_python</a></code> and the rest of your code.</p></li>
-<li><p>ASYNC: [⚠️Not yet implemented] this way works delegating the task to record or to play
-a song file in background. Works with threads.</p></li>
-<li><p>MULTIPROCESS: [⚠️Not yet implemented] Works with processes.</p></li>
-</ol>
-
-<p>📄 More information about <code>pipewire</code> and it's API's:</p>
-
-<ul>
-<li>🎵 Asyncio https://docs.python.org/3/library/asyncio-subprocess.html</li>
-<li>🎵 Pipewire APIs https://www.linuxfromscratch.org/blfs/view/cvs/multimedia/pipewire.html</li>
-<li>🎵 APIs example https://fedoraproject.org/wiki/QA:Testcase_PipeWire_PipeWire_CLI</li>
-</ul>
-
-<p>Developed with ❤️ by Pablo Diaz &amp; Anna Absi </p>
-
-<h2 id="install-via">Install via</h2>
-
-<div class="codehilite"><pre><span></span><code>pip3 install pipewire_python <span class="c1"># or pip</span>
-</code></pre></div>
-
-<h2 id="tutorial">Tutorial</h2>
-
-<p>Tutorial <a href="https://github.com/pablodz/pipewire_python/blob/main/README.py">here</a></p>
-
-<hr>
-
-<h2 id="documentation">Documentation</h2>
-
-<p>In the next pages you'll see documentation of each python component.</p>
+<p>In the next pages you'll see documentation of each python component
+<code>controller.py</code>.</p>
 </div>
 
                         <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">## Description</span>
-
-<span class="sd">[PIPEWIRE](https://pipewire.org/) provides a low-latency, graph based processing engine</span>
-<span class="sd">on top of audio and video devices that can be used to</span>
-<span class="sd">support the use cases currently handled by both pulseaudio</span>
-<span class="sd">and JACK. PipeWire was designed with a powerful security model</span>
-<span class="sd">that makes interacting with audio and video devices from </span>
-<span class="sd">containerized applications easy, with supporting Flatpak</span>
-<span class="sd">applications being the primary goal. Alongside Wayland and</span>
-<span class="sd">Flatpak we expect PipeWire to provide a core building block </span>
-<span class="sd">for the future of Linux application development.</span>
-
-<span class="sd">[pipewire_python](https://pypi.org/project/pipewire_python/) </span>
-<span class="sd">controlls `pipewire` via terminal, creating shell commands and executing them as required.</span>
-
-<span class="sd">🎹 There are two ways to manage the python package:</span>
-
-<span class="sd">1. NO_ASYNC: this way works as expected with delay time between </span>
-<span class="sd">`pipewire_python` and the rest of your code.</span>
-
-<span class="sd">2. ASYNC: [⚠️Not yet implemented] this way works delegating the task to record or to play</span>
-<span class="sd">a song file in background. Works with threads.</span>
-
-<span class="sd">3. MULTIPROCESS: [⚠️Not yet implemented] Works with processes.</span>
-
-
-<span class="sd">📄 More information about `pipewire` and it&#39;s API&#39;s:</span>
-
-<span class="sd">- 🎵 Asyncio https://docs.python.org/3/library/asyncio-subprocess.html</span>
-<span class="sd">- 🎵 Pipewire APIs https://www.linuxfromscratch.org/blfs/view/cvs/multimedia/pipewire.html</span>
-<span class="sd">- 🎵 APIs example https://fedoraproject.org/wiki/QA:Testcase_PipeWire_PipeWire_CLI</span>
-
-<span class="sd">Developed with ❤️ by Pablo Diaz &amp; Anna Absi </span>
-
-
-<span class="sd">##  Install via</span>
-<span class="sd">```bash</span>
-
-<span class="sd">pip3 install pipewire_python # or pip</span>
-<span class="sd">```</span>
-
-<span class="sd">## Tutorial</span>
-
-<span class="sd">Tutorial [here](https://github.com/pablodz/pipewire_python/blob/main/README.py)</span>
-
-<span class="sd">&lt;hr&gt;</span>
 <span class="sd">## Documentation</span>
 
-<span class="sd">In the next pages you&#39;ll see documentation of each python component.</span>
+<span class="sd">In the next pages you&#39;ll see documentation of each python component</span>
+<span class="sd">`controller.py`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
