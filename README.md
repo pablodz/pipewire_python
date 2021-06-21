@@ -17,7 +17,7 @@ Python controller, player and recorder via pipewire's commands
 
 ## Requirements
 
-1. A pipewire version installed (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
+1. A pipewire version installed (0.3.30+) (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
 
 ```bash
 pw-cli info 0

@@ -1,7 +1,12 @@
 """
-Here we store ONLY functions
+Here we store internal functions, don't expect
+to see something here in documentation html version.
 """
 import subprocess
+import asyncio
+import re
+# Loading constants Constants.py
+from ._constants import (MESSAGES_ERROR)
 
 
 def _print_std(
@@ -90,7 +95,6 @@ def _execute_shell_command(
     Args:
         - command (str): command line to execute. Example: 'ls -l'
         - timeout (int): (seconds) time to end the terminal process
-        # Debug
         - verbose (bool): print variables for debug purposes
     Return:
         - stdout (str): terminal response to the command
@@ -120,3 +124,71 @@ def _execute_shell_command(
 
         # Return terminal output
         return stdout, stderr
+
+
+async def _execute_shell_command_async(
+    command,
+    timeout: int = -1,
+    # Debug
+    verbose: bool = False,
+):
+    """[ASYNC] Function that execute terminal commands in asyncio way
+
+    Args:
+        - command (str): command line to execute. Example: 'ls -l'
+    Return:
+        - stdout (str): terminal response to the command.
+        - stderr (str): terminal response to the command.
+    """
+    if timeout == -1:
+        # No timeout
+        terminal_process_async = await asyncio.create_subprocess_shell(
+            command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        )
+        stdout, stderr = await terminal_process_async.communicate()
+        print(
+            f"[_execute_shell_command_async]\
+                [{command!r} exited with\
+                {terminal_process_async.returncode}]"
+        )
+        _print_std(stdout, stderr, verbose=verbose)
+
+    else:
+        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+
+    return stdout, stderr
+
+
+def _generate_dict_list_targets(
+    longstring: str,  # string output of shell
+    # Debug
+    verbose:bool=False,
+):
+    """Function that transform long string of list targets
+    to a `dict`
+    """
+
+    regex_id = r'(\d.*):'
+    regex_desc = r'description="([^"]*)"'
+    regex_prio = r'prio=(\d.*)'
+    regex_default_node = r'[*]\t(\d\d)'
+    regex_alsa_node = r'(alsa_[a-zA-Z].*)'
+
+    results_regex_id = re.findall(regex_id, longstring)
+    results_regex_desc = re.findall(regex_desc, longstring)
+    results_regex_prio = re.findall(regex_prio, longstring)
+    results_regex_default_node = re.findall(regex_default_node, longstring)
+    results_regex_alsa_mode = re.findall(regex_alsa_node, longstring)
+
+    mydict = {}
+    for idx in range(len(results_regex_id)):
+        mydict[results_regex_id[idx]] = {"description": results_regex_desc[idx],
+                                  "prior": results_regex_prio[idx]}
+    mydict['_list_nodes'] = results_regex_id
+    mydict['_node_default'] = results_regex_default_node
+    mydict['_alsa_node'] = results_regex_alsa_mode
+
+    if verbose:
+        print(mydict)
+
+    return mydict

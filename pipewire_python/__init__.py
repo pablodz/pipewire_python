@@ -1,7 +1,9 @@
-"""pipewire_python:
-Python controller, player and recorder via pipewire's commands"""
+"""
+Pipewire Controller:
+Python version, player and recorder via pipewire's commands
+"""
 
-__version__ = "0.0.83"
+__version__ = "0.0.85"
 
 import sys
 

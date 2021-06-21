@@ -1,63 +1,91 @@
 """
-[DOCS]:
-- Asyncio https://docs.python.org/3/library/asyncio-subprocess.html
-- Pipewire APIs https://www.linuxfromscratch.org/blfs/view/cvs/multimedia/pipewire.html
-- APIs example https://fedoraproject.org/wiki/QA:Testcase_PipeWire_PipeWire_CLI
+## Description
 
-[NO ASYNC]:
-    subprocess
+[PIPEWIRE](https://pipewire.org/) provides a low-latency, graph based processing engine
+on top of audio and video devices that can be used to
+support the use cases currently handled by both pulseaudio
+and JACK. PipeWire was designed with a powerful security model
+that makes interacting with audio and video devices from 
+containerized applications easy, with supporting Flatpak
+applications being the primary goal. Alongside Wayland and
+Flatpak we expect PipeWire to provide a core building block 
+for the future of Linux application development.
 
-[ASYNC]:
-    asyncio
+[pipewire_python](https://pypi.org/project/pipewire_python/) 
+controlls `pipewire` via terminal, creating shell commands and executing them as required.
+
+🎹 There are two ways to manage the python package:
+
+1. NO_ASYNC: this way works as expected with delay time between 
+`pipewire_python` and the rest of your code.
+
+2. ASYNC: [⚠️Not yet implemented] this way works delegating the task to record or to play
+a song file in background. Works with threads.
+
+3. MULTIPROCESS: [⚠️Not yet implemented] Works with processes.
+
+
+📄 More information about `pipewire` and it's API's:
+
+- 🎵 Asyncio https://docs.python.org/3/library/asyncio-subprocess.html
+- 🎵 Pipewire APIs https://www.linuxfromscratch.org/blfs/view/cvs/multimedia/pipewire.html
+- 🎵 APIs example https://fedoraproject.org/wiki/QA:Testcase_PipeWire_PipeWire_CLI
+
+Developed with ❤️ by Pablo Diaz & Anna Absi 
+
+
+##  Install via
+```bash
+
+pip3 install pipewire_python # or pip
+```
+
+## Tutorial
+
+Tutorial [here](https://github.com/pablodz/pipewire_python/blob/main/README.py)
+
+<hr>
+## Documentation
+
+In the next pages you'll see documentation of each python component.
 """
 
-import asyncio
 import warnings
-from .utils import (
-    _print_std,
-    _get_dict_from_stdout,
-    _update_dict_by_dict,
-    _drop_keys_with_none_values,
-    _generate_command_by_dict,
-    _execute_shell_command,
-)
 
-# [FLAKE8] TO_AVOID_F401 PEP8
-# https://stackoverflow.com/a/31079085/10491422
-__all__ = [
-    "_print_std",
-    "_get_dict_from_stdout",
-    "_update_dict_by_dict",
-    "_drop_keys_with_none_values",
-    "_generate_command_by_dict",
-    "_execute_shell_command",
-]
+# Loading internal functions
+from ._utils import (_drop_keys_with_none_values,
+                    _execute_shell_command,
+                    _generate_command_by_dict,
+                    _get_dict_from_stdout,
+                    _print_std, _update_dict_by_dict,
+                    _generate_dict_list_targets)
 
-MESSAGES_ERROR = {
-    "NotImplementedError": "This function is not yet implemented",
-    "ValueError": "The value entered is wrong",
-}
+# Loading constants Constants.py
+from ._constants import (MESSAGES_ERROR,
+                        RECOMMENDED_FORMATS,
+                        RECOMMENDED_RATES)
 
-RECOMMENDED_RATES = [
-    8000,
-    11025,
-    16000,
-    22050,
-    44100,
-    48000,
-    88200,
-    96000,
-    176400,
-    192000,
-    352800,
-    384000,
-]
-RECOMMENDED_FORMATS = ["u8", "s8", "s16", "s32", "f32", "f64"]
+# [DEPRECATED] [FLAKE8] TO_AVOID_F401 PEP8
+# [DEPRECATED] https://stackoverflow.com/a/31079085/10491422
+# NOW USED IN DOCUMENTATION
+# __all__ = [
+#     # Classes and fucntions to doc
+#     'Controller',
+#     # [DEPRECATED] Unused files pylint
+#     # "_print_std",
+#     # "_get_dict_from_stdout",
+#     # "_update_dict_by_dict",
+#     # "_drop_keys_with_none_values",
+#     # "_generate_command_by_dict",
+#     # "_execute_shell_command",
+# ]
 
 
-class Controller:
+class Controller():
     """
-    Class that controlls pipewire command line interface with shell commands
+    Class that controls pipewire command line interface
+    with shell commands, handling outputs, loading default
+    configs and more.
     """
 
     _pipewire_cli = {  # Help
@@ -73,8 +101,8 @@ class Controller:
         "--midi": None,  # -m
     }
 
-    _pipewire_targets = {
-        "--list-targets": None,
+    _pipewire_list_targets = {  # "--list-targets": None,
+
     }
 
     _pipewire_configs = {  # Configs
@@ -96,11 +124,15 @@ class Controller:
         # Debug
         verbose: bool = False,
     ):
+        """This constructor load default configs from OS executing
+        the following pipewire command
+
+        ```bash
+        #!/bin/bash
+        # Get defaults from output of:
+        pw-cat -h
+        ```
         """
-        Constructor that get default parameters of pipewire command line
-        interface and assign to variables to use in python controller
-        """
-        # super().__init__()
         # LOAD ALL DEFAULT PARAMETERS
 
         mycommand = ["pw-cat", "-h"]
@@ -127,32 +159,120 @@ class Controller:
         if verbose:
             print(self._pipewire_configs)
 
+        # Load values of list targets
+        self.load_list_targets(mode='playback', verbose=verbose)
+        self.load_list_targets(mode='record', verbose=verbose)
+
     def _help(self):
-        """
-        Get pipewire command line help
-        """
-
-        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
-
-    def version(self):
-        """
-        Get version of pipewire installed on OS.
+        """Get pipewire command line help
         """
 
         raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+
+    def get_version(self,
+                    verbose: bool = False
+                    ):
+        """Get version of pipewire installed on OS by executing the following
+        code:
+
+        ```bash
+        #!/bin/bash
+        pw-cli --version
+        ```
+
+        Args:
+            verbose (bool) : True enable debug logs. *default=False
+
+        Returns:
+            - versions (list) : Versions of pipewire compiled
+        """
+
+        mycommand = ['pw-cli', '--version']
+
+        if verbose:
+            print(f"[mycommand]{mycommand}")
+
+        stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+        versions = stdout.decode().split('\n')[1:]
+        return versions
 
     def verbose(self):
-        """
-        Not implemented yet
+        """[⚠️NOT IMPLEMENTED YET]
+
+        Get full log of pipewire stream status with the following command
+
+        ```bash
+        #!/bin/bash
+        # For example
+        pw-cat --playback beers.wav --verbose
+        ```
+
+        will generate an output like this:
+
+        ```bash
+        opened file "beers.wav" format 00010002 channels:2 rate:44100
+        using default channel map: FL,FR
+        rate=44100 channels=2 fmt=s16 samplesize=2 stride=4 latency=4410 (0.100s)
+        connecting playback stream; target_id=4294967295
+        stream state changed unconnected -> connecting
+        stream param change: id=2
+        stream properties:
+            media.type = "Audio"
+            media.category = "Playback"
+            media.role = "Music"
+            application.name = "pw-cat"
+            media.filename = "beers.wav"
+            media.name = "beers.wav"
+            node.name = "pw-cat"
+            media.software = "Lavf58.33.100"
+            media.format = "WAV (Microsoft)"
+            node.latency = "4410/44100"
+            stream.is-live = "true"
+            node.autoconnect = "true"
+            media.class = "Stream/Output/Audio"
+        now=0 rate=0/0 ticks=0 delay=0 queued=0
+        remote 0 is named "pipewire-0"
+        core done
+        stream state changed connecting -> paused
+        stream param change: id=2
+        stream param change: id=15
+        stream param change: id=15
+        stream param change: id=4
+        stream state changed paused -> streaming
+        stream param change: id=2
+        set stream volume to 1.000 - success
+        stream node 73
+        stream param change: id=15
+        stream param change: id=15
+        now=13465394419270 rate=1/48000 ticks=35840 delay=512 queued=0
+        now=13466525228363 rate=1/48000 ticks=90112 delay=512 queued=0
+        now=13467250652784 rate=1/48000 ticks=124928 delay=512 queued=0
+        now=13468381462104 rate=1/48000 ticks=179200 delay=512 queued=0
+        now=13469490934155 rate=1/48000 ticks=232448 delay=512 queued=0
+        now=13470600406171 rate=1/48000 ticks=285696 delay=512 queued=0
+        now=13471347166416 rate=1/48000 ticks=321536 delay=512 queued=0
+        stream drained
+        stream state changed streaming -> paused
+        stream param change: id=4
+        stream state changed paused -> unconnected
+        stream param change: id=4
+
+        ```
         """
 
         raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
 
     def get_config(self):
-        """
-        Return config dictionary with default or setup variables, remember that
+        """Return config dictionary with default or setup variables, remember that
         this object changes only on python-side. Is not updated on real time,
         For real-time, please create and destroy the class.
+
+        Args:
+            Nothing
+
+        Returns:
+            - _pipewire_configs (`dict`) : dictionary with config values
+
         """
 
         return self._pipewire_configs
@@ -174,10 +294,33 @@ class Controller:
         # Debug
         verbose=False,
     ):
-        """
-        Set configuration to playback or record with pw-cat command.
-        """
-        # 1 - media_type
+        """Method that get args as variables and set them
+        to the `json` parameter of the class `_pipewire_configs`,
+        then you can use in other method, such as `playback(...)` or 
+        `record(...)`. This method verifies values to avoid wrong
+        settings.
+
+        Args:
+            media_type : Set media type
+            media_category : Set media category
+            media_role : Set media role
+            target : Set node target 
+            latency : Set node latency *example=100ms
+            rate : Set sample rate [8000,11025,16000,22050,44100,48000,88200,96000,176400,192000,352800,384000]
+            channels : Numbers of channels [1,2]
+            channels_map : ["stereo", "surround-51", "FL,FR", ...]
+            _format : ["u8", "s8", "s16", "s32", "f32", "f64"] 
+            volume : Stream volume [0.000, 1.000]
+            quality : Resampler quality [0, 15]
+            verbose (`bool`): True enable debug logs. *default=False
+
+        Returns:
+            - Nothing
+
+        More:
+            Check all links listed at the beginning of this page
+
+        """  # 1 - media_type
         if media_type:
             self._pipewire_configs["--media-type"] = str(media_type)
         elif media_type is None:
@@ -300,16 +443,84 @@ class Controller:
         if verbose:
             print(self._pipewire_configs)
 
-    def list_targets(
+    def load_list_targets(
         self,
         mode,  # playback or record
+        # Debug,
+        verbose: bool = False,
     ):
-        """
-        Returns a list of targets to playback or record. Then you can use
+        """Returns a list of targets to playback or record. Then you can use
         the output to select a device to playback or record.
         """
 
-        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+        if mode == 'playback':
+            mycommand = ['pw-cat', '--playback', '--list-targets']
+            stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+            self._pipewire_list_targets['list_playblack'] = _generate_dict_list_targets(longstring=stdout.decode(),
+                                                                                        verbose=verbose)
+        elif mode == 'record':
+            mycommand = ['pw-cat', '--record', '--list-targets']
+            stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+            self._pipewire_list_targets['list_record'] = _generate_dict_list_targets(longstring=stdout.decode(),
+                                                                                     verbose=verbose)
+        else:
+            raise AttributeError(MESSAGES_ERROR["ValueError"])
+
+        if verbose:
+            print(f"[mycommand]{mycommand}")
+
+    def get_list_targets(
+        self,
+        # Debug,
+        verbose: bool = False,
+    ):
+        """Returns a list of targets to playback or record. Then you can use
+        the output to select a device to playback or record.
+
+        Returns:
+            - `_pipewire_list_targets`
+
+        Examples:
+        ```python
+        >>> Controller().get_list_targets()
+        {
+        "list_playblack": {
+            "86": {
+            "description": "Starship/Matisse HD Audio Controller Pro",
+            "prior": "936"
+            },
+            "_list_nodes": [
+            "86"
+            ],
+            "_node_default": [
+            "86"
+            ],
+            "_alsa_node": [
+            "alsa_output.pci-0000_0a_00.4.pro-output-0"
+            ]
+        },
+        "list_record": {
+            "86": {
+            "description": "Starship/Matisse HD Audio Controller Pro",
+            "prior": "936"
+            },
+            "_list_nodes": [
+            "86"
+            ],
+            "_node_default": [
+            "86"
+            ],
+            "_alsa_node": [
+            "alsa_output.pci-0000_0a_00.4.pro-output-0"
+            ]
+        }
+        }
+        ```
+        """
+
+        if verbose:
+            print(self._pipewire_list_targets)
+        return self._pipewire_list_targets
 
     def playback(
         self,
@@ -317,14 +528,22 @@ class Controller:
         # Debug
         verbose: bool = False,
     ):
-        """
-        Execute pipewire command to play an audio file
+        """Execute pipewire command to play an audio file with the following
+        command:
+
+        ```bash
+        #!/bin/bash
+        pw-cat --playback {audio_filename} + {configs}
+        # configs are a concatenated params
+        ```
 
         Args:
-            - audio_filename (str): path of the file to be played. *default='myplayback.wav'
-        Return:
-            - stdout (str): shell response to the command
-            - stderr (str): shell response to the command
+            audio_filename (`str`): Path of the file to be played. *default='myplayback.wav'
+            verbose (`bool`): True enable debug logs. *default=False
+
+        Returns:
+            - stdout (`str`): Shell response to the command in stdout format
+            - stderr (`str`): Shell response response to the command in stderr format
         """
         warnings.warn("The name of the function may change on future releases", DeprecationWarning)
 
@@ -345,14 +564,22 @@ class Controller:
         # Debug
         verbose: bool = False,
     ):
-        """
-        Execute pipewire command to record an audio file
+        """Execute pipewire command to record an audio file, with a timeout of 5
+        seconds with the following code and exiting the shell when tiomeout is over.
+
+        ```bash
+        #!/bin/bash
+        pw-cat --record {audio_filename}
+        # timeout is managed by python3 (when signal CTRL+C is sended)
+        ```
 
         Args:
-            - audio_filename (str): path of the file to be played. *default='myplayback.wav'
-        Return:
-            - stdout (str): shell response to the command
-            - stderr (str): shell response to the command
+            audio_filename (`str`): Path of the file to be played. *default='myplayback.wav'
+            verbose (`bool`): True enable debug logs. *default=False
+
+        Returns:
+            - stdout (`str`): Shell response to the command in stdout format
+            - stderr (`str`): Shell response response to the command in stderr format
         """
         warnings.warn("The name of the function may change on future releases", DeprecationWarning)
 
@@ -374,43 +601,9 @@ class Controller:
         # Debug
         verbose: bool = False,
     ):
-        """
+        """[⚠️NOT IMPLEMENTED YET] 
         Function to stop process running under pipewire.
         Example: pw-cat process
         """
 
         raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
-
-    async def _execute_shell_command_async(
-        self,
-        command,
-        timeout: int = -1,
-        # Debug
-        verbose: bool = False,
-    ):
-        """
-        [ASYNC] Function that execute terminal commands in asyncio way
-
-        Args:
-            - command (str): command line to execute. Example: 'ls -l'
-        Return:
-            - stdout (str): terminal response to the command
-            - stderr (str): terminal response to the command
-        """
-        if timeout == -1:
-            # No timeout
-            terminal_process_async = await asyncio.create_subprocess_shell(
-                command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-            )
-            stdout, stderr = await terminal_process_async.communicate()
-            print(
-                f"[_execute_shell_command_async]\
-                    [{command!r} exited with\
-                    {terminal_process_async.returncode}]"
-            )
-            _print_std(stdout, stderr, verbose=verbose)
-
-        else:
-            raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
-
-        return stdout, stderr
