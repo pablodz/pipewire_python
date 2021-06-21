@@ -19,19 +19,22 @@ jobs:
       - name: install deps and run automatic documentation
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements_dev.txt
-          pdoc pipewire_python/ --docformat google --output-directory docs/html/ --edit-url pipewire_python=https://github.com/pablodz/pipewire_python/tree/main/pipewire_python/
+          python -m pip install pdoc
+
+      - name: run automatic documentation
+        run: |
+          python -m pdoc pipewire_python/ --docformat google --output-directory docs/html/ --edit-url pipewire_python=https://github.com/pablodz/pipewire_python/tree/main/pipewire_python/
 
       - name: commit the daily updates
         run: |
+          git pull          
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git commit -m "pdoc updated to latest release" -a
+          git commit --allow-empty -m "pdoc updated to latest release" -a
 
       - name: push my changes
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
+          branch: main
