@@ -183,8 +183,8 @@ def _generate_dict_list_targets(
     results_regex_alsa_mode = re.findall(regex_alsa_node, longstring)
 
     mydict = {}
-    for idx in enumerate(results_regex_id):
-        mydict[f"{results_regex_id[idx]}"] = {
+    for idx, _ in enumerate(results_regex_id):
+        mydict[results_regex_id[idx]] = {
             "description": results_regex_desc[idx],
             "prior": results_regex_prio[idx],
         }
