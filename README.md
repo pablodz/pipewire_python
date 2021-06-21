@@ -78,7 +78,7 @@ Future implementations, next steps, API implementation and Control over pipewire
 
 ## Contributions
 
-PR, FR and issues are welcome.
+PR, FR and issues are welcome. Changes with PR in `dev` branch please due documentation runs after each commit in `main` branch. Check more [here](docs/NEW_RELEASE.md)
 
 ## License
 

@@ -1,11 +1,11 @@
 name: publish_docs
 
 on:
-  release:
-    types: [created]
-  # Uncommend for debug this .yml
-  # push:
-  #   branches: [main]
+  # ON RELEASE, the commit is not handled by Github Actions
+  # release:
+  #   types: [created]
+  push:
+    branches: [main]
 jobs:
   publish-docs:
     runs-on: ubuntu-latest
