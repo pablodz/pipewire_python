@@ -30,11 +30,10 @@ jobs:
 
       - name: commit files
         run: |
-          git pull --tags
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add -A
-          git commit --allow-empty -m "pdoc updated to latest release" -a
+          git commit -m "pdoc updated to latest release" -a
 
       - name: push changes
         uses: ad-m/github-push-action@master
