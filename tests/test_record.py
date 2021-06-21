@@ -12,6 +12,4 @@ def test_record():
                             timeout_seconds=1,
                             # Debug
                             verbose=True)
-
-    
     assert type(audio_controller.get_config())
