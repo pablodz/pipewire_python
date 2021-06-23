@@ -45,9 +45,8 @@ class Controller:
     """
 
     _pipewire_cli = {  # Help
-        "--help": None,  # -h
-        "--version": None,
-        "--verbose": None,  # -v
+        "--help": "--help",  # -h
+        "--version": "--version",
         "--remote": None,  # -r
     }
 
@@ -70,10 +69,17 @@ class Controller:
         "--latency": None,  # *default=100ms (SOURCE FILE if not specified)
         "--rate": None,  # *default=48000
         "--channels": None,  # [1,2] *default=2
-        "--channel-map": None,  # ["stereo", "surround-51", "FL,FR"...] *default=unknown
+        "--channel-map": None,  # ["stereo", "surround-51", "FL,FR"...] *default="FL,FR"
         "--format": None,  # [u8|s8|s16|s32|f32|f64] *default=s16
         "--volume": None,  # [0.0,1.0] *default=1.000
         "--quality": None,  # -q # [0,15] *default=4
+        "--verbose": None,  # -v
+    }
+
+    _kill_pipewire = {
+        "all": ["kill", "$(pidof pw-cat)"],
+        "playback": ["kill", "$(pidof pw-play)"],
+        "record": ["kill", "$(pidof pw-record)"],
     }
 
     def __init__(
@@ -120,10 +126,18 @@ class Controller:
         self.load_list_targets(mode="playback", verbose=verbose)
         self.load_list_targets(mode="record", verbose=verbose)
 
-    def _help(self):
+    def _help_cli(
+        self,
+        # Debug
+        verbose: bool = True,
+    ):
         """Get pipewire command line help"""
 
-        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+        mycommand = ["pipewire", self._pipewire_cli["--help"]]
+
+        stdout, _ = _execute_shell_command(command=mycommand, verbose=verbose)  # stderr
+
+        return stdout
 
     def get_version(
         self,
@@ -157,10 +171,13 @@ class Controller:
 
         return versions
 
-    def verbose(self):
-        """[⚠️NOT IMPLEMENTED YET]
+    def verbose(
+        self,
+        status: bool = True,
+    ):
+        """Get full log of pipewire stream status with the command `pw-cat`
 
-        Get full log of pipewire stream status with the following command
+        An example of pw-cli usage is the code below:
 
         ```bash
         #!/bin/bash
@@ -168,7 +185,7 @@ class Controller:
         pw-cat --playback beers.wav --verbose
         ```
 
-        will generate an output like this:
+        that will generate an output like this:
 
         ```bash
         opened file "beers.wav" format 00010002 channels:2 rate:44100
@@ -179,49 +196,30 @@ class Controller:
         stream param change: id=2
         stream properties:
             media.type = "Audio"
-            media.category = "Playback"
-            media.role = "Music"
-            application.name = "pw-cat"
-            media.filename = "beers.wav"
-            media.name = "beers.wav"
-            node.name = "pw-cat"
-            media.software = "Lavf58.33.100"
-            media.format = "WAV (Microsoft)"
-            node.latency = "4410/44100"
-            stream.is-live = "true"
-            node.autoconnect = "true"
-            media.class = "Stream/Output/Audio"
+            ...
         now=0 rate=0/0 ticks=0 delay=0 queued=0
         remote 0 is named "pipewire-0"
         core done
         stream state changed connecting -> paused
         stream param change: id=2
-        stream param change: id=15
-        stream param change: id=15
-        stream param change: id=4
-        stream state changed paused -> streaming
-        stream param change: id=2
-        set stream volume to 1.000 - success
-        stream node 73
+        ...
         stream param change: id=15
         stream param change: id=15
         now=13465394419270 rate=1/48000 ticks=35840 delay=512 queued=0
         now=13466525228363 rate=1/48000 ticks=90112 delay=512 queued=0
-        now=13467250652784 rate=1/48000 ticks=124928 delay=512 queued=0
-        now=13468381462104 rate=1/48000 ticks=179200 delay=512 queued=0
-        now=13469490934155 rate=1/48000 ticks=232448 delay=512 queued=0
-        now=13470600406171 rate=1/48000 ticks=285696 delay=512 queued=0
-        now=13471347166416 rate=1/48000 ticks=321536 delay=512 queued=0
+        ...
         stream drained
         stream state changed streaming -> paused
         stream param change: id=4
         stream state changed paused -> unconnected
         stream param change: id=4
-
         ```
         """
 
-        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+        if status:
+            self._pipewire_configs["--verbose"] = "    "
+        else:
+            pass
 
     def get_config(self):
         """Return config dictionary with default or setup variables, remember that
@@ -280,7 +278,6 @@ class Controller:
 
         More:
             Check all links listed at the beginning of this page
-
         """  # 1 - media_type
         if media_type:
             self._pipewire_configs["--media-type"] = str(media_type)
@@ -400,6 +397,12 @@ class Controller:
             pass
         else:
             raise ValueError(f"{MESSAGES_ERROR['ValueError']}[volume='{volume}'] EMPTY VALUE")
+
+        # 12 - verbose cli
+        if verbose:  # True
+            self._pipewire_configs["--verbose"] = "    "
+        else:
+            pass
 
         if verbose:
             print(self._pipewire_configs)
@@ -564,9 +567,24 @@ class Controller:
         # Debug
         verbose: bool = False,
     ):
-        """[⚠️NOT IMPLEMENTED YET]
-        Function to stop process running under pipewire.
-        Example: pw-cat process
+        """Function to stop process running under pipewire executed by
+        python controller and with default process name of `pw-cat`, `pw-play` or `pw-record`.
+
+        Args:
+            mode (`str`) : string to kill process under `pw-cat`, `pw-play` or `pw-record`.
+
+        Returns:
+            - stdoutdict (`dict`) : a dictionary with keys of `mode`.
+
+        Example with pipewire:
+            pw-cat process
         """
 
-        raise NotImplementedError(MESSAGES_ERROR["NotImplementedError"])
+        mycommand = self._kill_pipewire[mode]
+
+        if verbose:
+            print(f"[mycommands]{mycommand}")
+
+        stdout, _ = _execute_shell_command(command=mycommand, verbose=verbose)
+
+        return {mode: stdout}
