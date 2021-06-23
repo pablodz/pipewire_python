@@ -97,7 +97,28 @@ a song file in background. Works with threads.</p></li>
 
 <h2 id="tutorial">Tutorial</h2>
 
-<p>Tutorial <a href="https://github.com/pablodz/pipewire_python/blob/main/README.py">here</a></p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="pipewire_python/controller.html">pipewire_python.controller</a></span> <span class="kn">import</span> <span class="n">Controller</span>
+
+<span class="c1"># PLAYBACK: normal way</span>
+<span class="n">audio_controller</span> <span class="o">=</span> <span class="n">Controller</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">audio_controller</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="n">rate</span><span class="o">=</span><span class="mi">384000</span><span class="p">,</span>
+                            <span class="n">channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">_format</span><span class="o">=</span><span class="s1">&#39;f64&#39;</span><span class="p">,</span>
+                            <span class="n">volume</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+                            <span class="n">quality</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                            <span class="c1"># Debug</span>
+                            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">audio_controller</span><span class="o">.</span><span class="n">playback</span><span class="p">(</span><span class="n">audio_filename</span><span class="o">=</span><span class="s1">&#39;docs/beers.wav&#39;</span><span class="p">,</span>
+                          <span class="c1"># Debug</span>
+                          <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># RECORD: normal way</span>
+<span class="n">audio_controller</span> <span class="o">=</span> <span class="n">Controller</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">audio_controller</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">audio_filename</span><span class="o">=</span><span class="s1">&#39;docs/5sec_record.wav&#39;</span><span class="p">,</span>
+                        <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="c1"># Debug</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 </div>
 
                         <details>
@@ -146,10 +167,34 @@ a song file in background. Works with threads.</p></li>
 
 <span class="sd">## Tutorial</span>
 
-<span class="sd">Tutorial [here](https://github.com/pablodz/pipewire_python/blob/main/README.py)</span>
+
+<span class="sd">```python</span>
+<span class="sd">from pipewire_python.controller import Controller</span>
+
+<span class="sd"># PLAYBACK: normal way</span>
+<span class="sd">audio_controller = Controller(verbose=True)</span>
+<span class="sd">audio_controller.set_config(rate=384000,</span>
+<span class="sd">                            channels=2,</span>
+<span class="sd">                            _format=&#39;f64&#39;,</span>
+<span class="sd">                            volume=0.98,</span>
+<span class="sd">                            quality=4,</span>
+<span class="sd">                            # Debug</span>
+<span class="sd">                            verbose=True)</span>
+<span class="sd">audio_controller.playback(audio_filename=&#39;docs/beers.wav&#39;,</span>
+<span class="sd">                          # Debug</span>
+<span class="sd">                          verbose=True)</span>
+
+<span class="sd"># RECORD: normal way</span>
+<span class="sd">audio_controller = Controller(verbose=True)</span>
+<span class="sd">audio_controller.record(audio_filename=&#39;docs/5sec_record.wav&#39;,</span>
+<span class="sd">                        timeout_seconds=5,</span>
+<span class="sd">                        # Debug</span>
+<span class="sd">                        verbose=True)</span>
+
+<span class="sd">```</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.91&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.92&quot;</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 
