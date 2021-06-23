@@ -9,7 +9,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/maintainability)](https://codeclimate.com/github/pablodz/pipewire_python/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/test_coverage)](https://codeclimate.com/github/pablodz/pipewire_python/test_coverage)
 
-Python controller, player and recorder via pipewire's commands
+## **ONLY AUDIO BY NOW [PR & FR WELCOME]**
+
+<hr>
+
+Python controller, player and recorder via pipewire's commands.
 
 - [Pipewire](https://gitlab.freedesktop.org/pipewire/pipewire) is a project that aims to greatly improve handling of audio and video under Linux. (Better than pulseaudio or jack)
 
@@ -65,7 +69,6 @@ audio_controller.playback(audio_filename='docs/beers.wav')
 audio_controller = Controller(verbose=True)
 audio_controller.record(audio_filename='docs/5sec_record.wav',
                         timeout_seconds=5)
-
 ```
 
 ## Documentation
