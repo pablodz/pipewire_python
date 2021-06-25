@@ -9,7 +9,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/maintainability)](https://codeclimate.com/github/pablodz/pipewire_python/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/test_coverage)](https://codeclimate.com/github/pablodz/pipewire_python/test_coverage)
 
-## **ONLY AUDIO BY NOW [PR & FR WELCOME]**
+JOIN OUR TELEGRAM SUPPORT:
+
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/pipewire_python)
+
+## **ONLY AUDIO BY NOW [PR & FR WELCOME]** 
 
 <hr>
 
