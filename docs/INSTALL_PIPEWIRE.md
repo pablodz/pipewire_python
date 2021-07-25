@@ -17,7 +17,7 @@ There are several tutorials on the Internet about installing Pipewire. However w
 
    5. Remove other versions of pipewire: <br>`sudo apt purge pipewire`
    
-   6. [] Run this command to remove other pipewire and pipewire-pulse packages <br> `sudo apt purge gstreamer1.0-pipewire libpipewire-* pipewire-audio-client-libraries pipewire-*`
+   6. [🟡OPTIONAL] Run this command to remove other pipewire and pipewire-pulse packages <br> `sudo apt purge gstreamer1.0-pipewire libpipewire-* pipewire-audio-client-libraries pipewire-*`
    
    7. Remove bluetooth drivers based on pulseaudio and jack applications based on pulseaudio.
    
