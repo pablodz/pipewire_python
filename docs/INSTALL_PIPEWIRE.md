@@ -1,4 +1,4 @@
-# PIPEWIRE INSTALLATION
+# PIPEWIRE INSTALLATION [UNSTABLE - USE WITH PRECAUTION]
 
 There are several tutorials on the Internet about installing Pipewire. However we recommend this method to avoid errors and unexpected things:
 
