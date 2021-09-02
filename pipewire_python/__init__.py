@@ -69,7 +69,7 @@ audio_controller.record(audio_filename='docs/5sec_record.wav',
 ```
 """
 
-__version__ = "0.0.92"
+__version__ = "0.0.93"
 
 import sys
 

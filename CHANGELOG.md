@@ -1,6 +1,10 @@
+# v0.0.93 (2021-09-02)
+
+Fix issue #5
+
 # v0.0.92 (2021-06-23)
 
-ALL functions of normal way implemented and documented
+ALL functions of usuall way implemented and documented
 
 # v0.0.89 (2021-06-21)
 
