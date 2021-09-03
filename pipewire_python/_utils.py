@@ -172,7 +172,7 @@ def _generate_dict_list_targets(
 
     regex_id = r"(\d.*):"
     regex_desc = r'description="([^"]*)"'
-    regex_prio = r"prio=([+-]\d.*)"
+    regex_prio = r"prio=(-?\d.*)"
     regex_default_node = r"[*]\t(\d\d)"
     regex_alsa_node = r"(alsa_[a-zA-Z].*)"
 
