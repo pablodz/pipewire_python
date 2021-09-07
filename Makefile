@@ -31,7 +31,7 @@ push:  ## Push code with tags
 # 	python -m pytest -ra
 
 tox:  ## Run tox
-	python -m tox
+	python3 -m tox
 	ls -la
 
 help:  ## Show help message
