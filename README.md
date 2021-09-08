@@ -8,6 +8,7 @@
 [![codecov](https://codecov.io/gh/pablodz/pipewire_python/branch/main/graph/badge.svg?token=VN6O9QK3ZH)](https://codecov.io/gh/pablodz/pipewire_python)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/maintainability)](https://codeclimate.com/github/pablodz/pipewire_python/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fe82f8353628a4214abd/test_coverage)](https://codeclimate.com/github/pablodz/pipewire_python/test_coverage)
+[![Downloads](https://pepy.tech/badge/pipewire-python)](https://pepy.tech/project/pipewire-python)
 
 JOIN OUR TELEGRAM SUPPORT:
 
