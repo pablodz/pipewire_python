@@ -32,6 +32,10 @@ Pipewire's API implementation:
 - [ ] `pw-cli ls Node`
 - [ ] `pw-metadata 0 default.configured.audio.sink '{ "name": "<sink-name>" }'` You can change the configured defaults with
 
+External aps
+
+- [x] Easyeffects 
+
 ## Availability
 
 - [X] PYPI package releases
