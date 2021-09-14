@@ -1,6 +1,6 @@
 # UNINSTALL PIPEWIRE
 
-Just run
+https://github.com/pipewire-debian/pipewire-debian
 
 ## Ubuntu 20.04+
 
