@@ -12,10 +12,11 @@ from ._utils import (
     _drop_keys_with_none_values,
     _execute_shell_command,
     _generate_command_by_dict,
+    _generate_dict_interfaces,
+    _generate_dict_list_targets,
     _get_dict_from_stdout,
     _print_std,
     _update_dict_by_dict,
-    _generate_dict_list_targets,
 )
 
 # Loading constants Constants.py
@@ -483,10 +484,41 @@ class Controller:
         }
         ```
         """
+        if verbose:
+            print(self._pipewire_list_currently_using)
+        return self._pipewire_list_currently_using
+
+    def get_list_interfaces(
+        self,
+        # Debug
+        verbose:bool=False,
+    ):
+        """Returns a list of applications currently using pipewire on Client. 
+        An example of pw-cli usage is the code below:
+
+        ```bash
+        #!/bin/bash
+        pw-cli ls Client
+        ```
+
+        Returns:
+            - `_pipewire_list_interfaces`
+
+        Examples:
+        ```python
+        >>> Controller().get_list_interfaces()
+
+        ```
+        """
+        mycommand = ["pw-cli", "info", "all"]
 
         if verbose:
-            print(self._pipewire_list_targets)
-        return self._pipewire_list_targets
+            print(f"[mycommand]{mycommand}")
+
+        stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+        dict_interfaces = _generate_dict_interfaces(stdout=str(stdout.decode()), verbose=verbose)
+        return dict_interfaces
+
 
     def playback(
         self,
