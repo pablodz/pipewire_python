@@ -27,8 +27,8 @@ publish:  ## Publish to PyPi
 push:  ## Push code with tags
 	git push && git push --tags
 
-# test:  ## Run tests
-# 	python -m pytest -ra
+test:  ## Run tests [LOCALHOST]
+	python -m pytest -ra
 
 tox:  ## Run tox
 	python3 -m tox

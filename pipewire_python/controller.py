@@ -11,6 +11,7 @@ import warnings
 from ._utils import (
     _drop_keys_with_none_values,
     _execute_shell_command,
+    _filter_by_type,
     _generate_command_by_dict,
     _generate_dict_interfaces,
     _generate_dict_list_targets,
@@ -490,19 +491,24 @@ class Controller:
 
     def get_list_interfaces(
         self,
+        filtered_by_type: str = True,
+        type_interfaces: str = "Client",
         # Debug
-        verbose:bool=False,
+        verbose: bool = False,
     ):
-        """Returns a list of applications currently using pipewire on Client. 
+        """Returns a list of applications currently using pipewire on Client.
         An example of pw-cli usage is the code below:
 
         ```bash
         #!/bin/bash
         pw-cli ls Client
         ```
+        Args:
+            filtered_by_type : If False, returns all. If not, returns a fitered dict
+            type_interfaces : Set type of Interface ["Client","Link","Node","Factory","Module","Metadata","Endpoint","Session","Endpoint Stream","EndpointLink","Port"]
 
         Returns:
-            - `_pipewire_list_interfaces`
+            - dict_interfaces_filtered: dictionary with list of interfaces matching conditions
 
         Examples:
         ```python
@@ -512,13 +518,20 @@ class Controller:
         """
         mycommand = ["pw-cli", "info", "all"]
 
-        if verbose:
-            print(f"[mycommand]{mycommand}")
+        # if verbose:
+        #     print(f"[mycommand]{mycommand}")
 
         stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-        dict_interfaces = _generate_dict_interfaces(stdout=str(stdout.decode()), verbose=verbose)
-        return dict_interfaces
+        dict_interfaces = _generate_dict_interfaces(longstring=stdout.decode(), verbose=verbose)
 
+        if filtered_by_type:
+            dict_interfaces_filtered = _filter_by_type(
+                dict_interfaces=dict_interfaces, type_interfaces=type_interfaces
+            )
+        else:
+            dict_interfaces_filtered = dict_interfaces
+
+        return dict_interfaces_filtered
 
     def playback(
         self,
