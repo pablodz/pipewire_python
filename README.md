@@ -24,7 +24,7 @@ Python controller, player and recorder via pipewire's commands.
 
 ## Requirements
 
-1. A pipewire version installed (clean or via pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
+1. A Pipewire version installed (clean or via Pulseaudio) is needed, to check if you have pipewire installed and running, run this command, if the output is different, you'll need to [install pipewire](./docs/INSTALL_PIPEWIRE.md):
 
     1. Pipewire versions supported: 0.3.30, 0.3.32+
 
@@ -60,11 +60,13 @@ pip3 install pipewire_python # or pip
 
 ### Tutorial
 
+#### PLAY AND RECORD
+
 ```python
 from pipewire_python.controller import Controller
 
 # [PLAYBACK]: normal way
-audio_controller = Controller(verbose=True)
+audio_controller = Controller()
 audio_controller.set_config(rate=384000,
                             channels=2,
                             _format='f64',
@@ -73,22 +75,39 @@ audio_controller.set_config(rate=384000,
 audio_controller.playback(audio_filename='docs/beers.wav')
 
 # [RECORD]: normal way
-audio_controller = Controller(verbose=True)
+audio_controller = Controller()
 audio_controller.record(audio_filename='docs/5sec_record.wav',
                         timeout_seconds=5)
 ```
+#### GET INTERFACES
+
+```python
+from pipewire_python.controller import Controller
+
+audio_controller = Controller()
+# Return all Client Interfaces on Pipewire
+audio_controller.get_list_interfaces(
+    type_interfaces="Client",
+    filtered_by_type=True,
+)
+# Return all interfaces
+audio_controller.get_list_interfaces(
+    filtered_by_type=False,
+)
+```
+
 
 ## Documentation
 
-You can check the automatic builded documentation [HERE](https://pablodz.github.io/pipewire_python/html/)
+You can check the automatic build documentation [HERE](https://pablodz.github.io/pipewire_python/html/)
 
 ## Roadmap
 
-Future implementations, next steps, API implementation and Control over pipewire directly from python in the [ROADMAP](docs/ROADMAP.md).
+Future implementations, next steps, API implementation and Control over Pipewire directly from python in the [ROADMAP](docs/ROADMAP.md).
 
 ## Contributions
 
-PR, FR and issues are welcome. Changes with PR in `dev` branch please due documentation runs after each commit in `main` branch. Check more [here](docs/NEW_RELEASE.md)
+PR, FR, and issues are welcome. Changes with PR in `dev` branch please due documentation runs after each commit in `main` branch. Check more [here](docs/NEW_RELEASE.md)
 
 ## License
 
