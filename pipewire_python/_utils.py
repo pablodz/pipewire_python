@@ -196,3 +196,99 @@ def _generate_dict_list_targets(
         print(mydict)
 
     return mydict
+
+
+def _generate_dict_interfaces(
+    longstring: str,  # string output of shell
+    # Debug
+    verbose: bool = False,
+):
+    """
+    Function that transform long string of list interfaces
+    to a `dict`
+    """
+
+    mydict = {}
+    text_in_lines = longstring.split("\n")
+    first_level = "X"
+
+    for line in text_in_lines:
+        try:
+            is_interface = True
+            if "id: " in line:
+                # when interface starts
+                regex_id = r"\tid: ([0-9]*)"
+                results_regex_id = re.findall(regex_id, line)
+                is_interface = False
+
+            if is_interface:
+                if "*" in line[:1]:
+                    # delete * on each line at the beginning
+                    line = line[1:]
+                if "\t\t" in line:
+                    # third level data
+                    data = line.replace("\t\t", "")
+                    data = data.split(" = ")
+                    third_level = str(data[0])
+                    data_to_place = " ".join(data[1:]).replace('"', "")
+
+                    if "properties" not in mydict[first_level]:
+                        mydict[first_level]["properties"] = {}
+                    if third_level not in mydict[first_level]["properties"]:
+                        mydict[first_level]["properties"][third_level] = {}
+                    mydict[first_level]["properties"][third_level] = data_to_place
+
+                elif "\t  " in line:
+                    # second level data: params
+
+                    data = line.replace("\t  ", "").split(" ")
+                    third_level = str(data[0])
+                    if type(mydict[first_level]["params"]) != dict:
+                        mydict[first_level]["params"] = {}
+                    mydict[first_level]["params"][third_level] = {
+                        "spa": data[1],
+                        "permissions": data[2],
+                    }
+
+                elif "\t" in line:
+                    # first level data
+                    data = line.replace("\t", "")
+                    data = data.split(": ")
+                    first_level = str(results_regex_id[0])
+                    second_level = str(data[0])
+                    data_to_place = " ".join(data[1:]).replace('"', "")
+
+                    # to_dict
+                    if first_level not in mydict:
+                        mydict[str(first_level)] = {}
+
+                    mydict[first_level][second_level] = data_to_place
+        except Exception as e:
+            print(e)
+
+    if verbose:
+        print(mydict)
+
+    return mydict
+
+
+def _filter_by_type(
+    dict_interfaces: dict,  # interfaecs dict
+    type_interfaces: str,  # string with type
+    # Debug
+    verbose: bool = False,
+):
+    """
+    Function that filters a `dict` by type of interface
+    """
+
+    dict_filtered = {}
+    for key in dict_interfaces:
+        # Filter
+        if type_interfaces in dict_interfaces[key]["type"]:
+            dict_filtered[key] = dict_interfaces[key]
+
+    if verbose:
+        print(dict_filtered)
+
+    return dict_filtered

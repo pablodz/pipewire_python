@@ -47,7 +47,7 @@ pip3 install pipewire_python # or pip
 from pipewire_python.controller import Controller
 
 # PLAYBACK: normal way
-audio_controller = Controller(verbose=True)
+audio_controller = Controller()
 audio_controller.set_config(rate=384000,
                             channels=2,
                             _format='f64',
@@ -55,9 +55,7 @@ audio_controller.set_config(rate=384000,
                             quality=4,
                             # Debug
                             verbose=True)
-audio_controller.playback(audio_filename='docs/beers.wav',
-                          # Debug
-                          verbose=True)
+audio_controller.playback(audio_filename='docs/beers.wav')
 
 # RECORD: normal way
 audio_controller = Controller(verbose=True)
@@ -69,7 +67,7 @@ audio_controller.record(audio_filename='docs/5sec_record.wav',
 ```
 """
 
-__version__ = "0.0.94"
+__version__ = "0.0.95"
 
 import sys
 

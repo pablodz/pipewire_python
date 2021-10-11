@@ -1,10 +1,14 @@
+# v0.0.95 (2021-10-10)
+
+Add feature #8
+
 # v0.0.93-94 (2021-09-02)
 
 Fix issue #5
 
 # v0.0.92 (2021-06-23)
 
-ALL functions of usuall way implemented and documented
+ALL functions of usual way implemented and documented
 
 # v0.0.89 (2021-06-21)
 
@@ -24,7 +28,7 @@ ASYNC still not implemented
 
 ### Features
 
-- ASYNCIO support play
+- Asyncio support play
 - Record default 5 seconds and more selected.
 
 ### Issues
