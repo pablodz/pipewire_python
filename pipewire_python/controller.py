@@ -59,7 +59,7 @@ class Controller:
     }
 
     _pipewire_list_targets = {  # "--list-targets": None,
-        "list_playblack": None,
+        "list_playback": None,
         "list_record": None,
     }
 
@@ -422,7 +422,7 @@ class Controller:
         if mode == "playback":
             mycommand = ["pw-cat", "--playback", "--list-targets"]
             stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-            self._pipewire_list_targets["list_playblack"] = _generate_dict_list_targets(
+            self._pipewire_list_targets["list_playback"] = _generate_dict_list_targets(
                 longstring=stdout.decode(), verbose=verbose
             )
         elif mode == "record":
@@ -452,7 +452,7 @@ class Controller:
         ```python
         >>> Controller().get_list_targets()
         {
-        "list_playblack": {
+        "list_playback": {
             "86": {
             "description": "Starship/Matisse HD Audio Controller Pro",
             "prior": "936"
@@ -486,8 +486,8 @@ class Controller:
         ```
         """
         if verbose:
-            print(self._pipewire_list_currently_using)
-        return self._pipewire_list_currently_using
+            print(self._pipewire_list_targets)
+        return self._pipewire_list_targets
 
     def get_list_interfaces(
         self,
