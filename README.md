@@ -1,4 +1,4 @@
-# PIPEWIRE's python controller
+# PIPEWIRE's python controller (wrapper)
 
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
