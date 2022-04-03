@@ -2,9 +2,10 @@
 Here we store internal functions, don't expect
 to see something here in documentation html version.
 """
-import subprocess
 import asyncio
 import re
+import subprocess
+from typing import Dict, List
 
 # Loading constants Constants.py
 from ._constants import MESSAGES_ERROR
@@ -49,8 +50,8 @@ def _get_dict_from_stdout(
 
 
 def _update_dict_by_dict(
-    main_dict: dict,
-    secondary_dict: dict,
+    main_dict: Dict,
+    secondary_dict: Dict,
 ):
     """
     Update values of one dictionary with values of another dictionary
@@ -67,7 +68,7 @@ def _drop_keys_with_none_values(main_dict: dict):
 
 
 def _generate_command_by_dict(
-    mydict: dict,
+    mydict: Dict,
     # Debug
     verbose: bool = False,
 ):
@@ -85,7 +86,7 @@ def _generate_command_by_dict(
 
 
 def _execute_shell_command(
-    command: list[str],
+    command: List[str],
     timeout: int = -1,  # *default= no limit
     # Debug
     verbose: bool = False,
