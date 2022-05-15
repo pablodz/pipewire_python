@@ -14,8 +14,8 @@ JOIN OUR TELEGRAM SUPPORT:
 
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/pipewire_python)
 
-**ONLY AUDIO BY NOW [PR & FR WELCOME]** 
-**STREAMING NOT SUPPORTED BY NOW**
+- **ONLY AUDIO BY NOW [PR & FR WELCOME]** 
+- **STREAMING NOT SUPPORTED BY NOW**
 
 <hr>
 
