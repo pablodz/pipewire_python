@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
 module = "pipewire_python"
-author = "Pablo Diaz & Anna Absi"
+author = "Pablo Diaz"
 home-page = "https://github.com/pablodz/pipewire_python"
 requires-python = ">=3.7"
 description-file = "README.md"
