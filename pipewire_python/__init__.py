@@ -31,7 +31,7 @@ a song file in background. Works with threads.
 - 🎵 Pipewire APIs https://www.linuxfromscratch.org/blfs/view/cvs/multimedia/pipewire.html
 - 🎵 APIs example https://fedoraproject.org/wiki/QA:Testcase_PipeWire_PipeWire_CLI
 
-Developed with ❤️ by Pablo Diaz & Anna Absi 
+Developed with ❤️ by Pablo Diaz
 
 
 ##  Install via
