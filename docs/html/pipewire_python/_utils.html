@@ -74,7 +74,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="p">):</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">    Print terminal output if are different to None and verbose activated</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
@@ -89,7 +89,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="p">):</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    Converts shell output (str) to dictionary looking for</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">    &quot;default&quot; and &quot;--&quot; values</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -110,7 +110,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="n">main_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="n">secondary_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="p">):</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">    Update values of one dictionary with values of another dictionary</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">    based on keys</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -118,7 +118,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="k">def</span> <span class="nf">_drop_keys_with_none_values</span><span class="p">(</span><span class="n">main_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    Drop keys with None values to parse safe dictionary config</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">main_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
@@ -129,7 +129,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="p">):</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">    Generate an array based on dictionary with keys and values</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>    <span class="n">array_command</span> <span class="o">=</span> <span class="p">[]</span>
@@ -148,7 +148,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="p">):</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    Execute command on terminal via subprocess</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    Args:</span>
@@ -191,7 +191,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="p">):</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="sd">&quot;&quot;&quot;[ASYNC] Function that execute terminal commands in asyncio way</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;[ASYNC] Function that execute terminal commands in asyncio way</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">    Args:</span>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        - command (str): command line to execute. Example: &#39;ls -l&#39;</span>
@@ -223,7 +223,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="p">):</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">    Function that transform long string of list targets</span>
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    to a `dict`</span>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -261,7 +261,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="p">):</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    Function that transform long string of list interfaces</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">    to a `dict`</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -336,7 +336,7 @@ to see something here in documentation html version.</p>
 </span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="c1"># Debug</span>
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a><span class="p">):</span>
-</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a><span class="sd">    Function that filters a `dict` by type of interface</span>
 </span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>
