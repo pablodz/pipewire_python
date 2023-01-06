@@ -7,19 +7,22 @@ module = "pipewire_python"
 author = "Pablo Diaz"
 home-page = "https://github.com/pablodz/pipewire_python"
 requires-python = ">=3.7"
-description-file = "README.md"
-classifiers = [ "License :: OSI Approved :: MIT License",
-                "Intended Audience :: Developers",
-                "Intended Audience :: Science/Research",
-                "Natural Language :: English",
-                "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
-                "Topic :: Multimedia :: Sound/Audio :: Players",
-                "Programming Language :: Python :: 3.7",
-                "Programming Language :: Python :: 3.8",
-                "Programming Language :: Python :: 3.9",
-                "Programming Language :: Python :: 3.10",
-                "Programming Language :: Python :: 3.11",
-                ]
+description = "Python controller, player and recorder via pipewire's commands"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = ["version"]
 
 
 [tool.black]

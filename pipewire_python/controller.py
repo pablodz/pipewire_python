@@ -1,7 +1,7 @@
 """
-## Documentation
+PIPEWIRE's Python controller (wrapper)
 
-In the next pages you'll see documentation of each python component
+In the next pages you'll see documentation of each Python component
 `controller.py`.
 """
 

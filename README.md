@@ -1,4 +1,4 @@
-# PIPEWIRE's python controller (wrapper)
+# PIPEWIRE's Python controller (wrapper)
 
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
@@ -46,7 +46,7 @@ pw-cli info 0
 ...
 ```
 
-> To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
+> To uninstall pipewire [click here](./docs/UNINSTALL_PIPEWIRE.md).
 
 2.  Python 3.7+
 3.  Ubuntu 20.04+
