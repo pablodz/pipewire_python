@@ -229,24 +229,24 @@ class StereoInput:
 
     def connect(
         self,
-        output_device: "StereoOutput"
+        other: "StereoOutput"
     ) -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
-        if self.left and output_device.left:
-            self.left.connect(output_device.left)
+        if self.left and other.left:
+            self.left.connect(other.left)
             connections.append(
                 Link(
                     input=self.left,
-                    output=output_device.left
+                    output=other.left
                 )
             )
-        if self.right and output_device.right:
-            self.right.connect(output_device.right)
+        if self.right and other.right:
+            self.right.connect(other.right)
             connections.append(
                 Link(
                     input=self.right,
-                    output=output_device.right
+                    output=other.right
                 )
             )
         if connections:
@@ -254,12 +254,12 @@ class StereoInput:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
     
-    def disconnect(self, output_device: Union["StereoOutput", "Link"]):
+    def disconnect(self, other: Union["StereoOutput", "StereoLink", "Link"]):
         """Disconnect this input from an output."""
-        if self.left and output_device.left:
-            self.left.disconnect(output_device.left)
-        if self.right and output_device.right:
-            self.right.disconnect(output_device.right)
+        if self.left and other.left:
+            self.left.disconnect(other.left)
+        if self.right and other.right:
+            self.right.disconnect(other.right)
 
 
 @dataclass
@@ -302,23 +302,23 @@ class StereoOutput:
 
     def connect(
         self,
-        input_device: "StereoInput"
+        other: "StereoInput"
     ) -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
-        if self.left and input_device.left:
-            self.left.connect(input_device.left)
+        if self.left and other.left:
+            self.left.connect(other.left)
             connections.append(
                 Link(
-                    input=input_device.left,
+                    input=other.left,
                     output=self.left
                 )
             )
-        if self.right and input_device.right:
-            self.right.connect(input_device.right)
+        if self.right and other.right:
+            self.right.connect(other.right)
             connections.append(
                 Link(
-                    input=input_device.right,
+                    input=other.right,
                     output=self.right
                 )
             )
@@ -327,12 +327,12 @@ class StereoOutput:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
     
-    def disconnect(self, input_device: Union["StereoInput", "Link"]):
+    def disconnect(self, other: Union["StereoInput", "StereoLink", "Link"]):
         """Disconnect this input from an output."""
-        if self.left and input_device.left:
-            self.left.disconnect(input_device.left)
-        if self.right and input_device.right:
-            self.right.disconnect(input_device.right)
+        if self.left and other.left:
+            self.left.disconnect(other.left)
+        if self.right and other.right:
+            self.right.disconnect(other.right)
 
 
 @dataclass
@@ -357,6 +357,10 @@ class Link:
         """Disconnect the Link."""
         self.input.disconnect(self.output)
 
+    def reconnect(self):
+        """Reconnect the Link if Previously Disconnected."""
+        self.input.connect(self.output)
+
 @dataclass
 class StereoLink:
     """
@@ -380,6 +384,11 @@ class StereoLink:
         """Disconnect the stereo pair of links."""
         self.left.disconnect()
         self.right.disconnect()
+
+    def reconnect(self):
+        """Reconnect the Link Pair if Previously Disconnected."""
+        self.left.reconnect()
+        self.right.reconnect()
 
 def _split_id_from_data(command) -> List[List[str]]:
     """Helper function to generate a list of channels"""
