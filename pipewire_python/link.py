@@ -60,7 +60,10 @@ __all__ = [
     "Port",
     "Input",
     "Output",
+    "StereoInput",
+    "StereoOutput",
     "Link",
+    "StereoLink",
     "list_inputs",
     "list_outputs",
     "list_links",
@@ -144,10 +147,52 @@ class Port:
         args.append("--disconnect")
         _ = _execute_shell_command(args)
 
-@dataclass
-class Input:
+class Input(Port):
     """
-    Pipewire Input Object.
+    Pipewire Link Input Port Object.
+
+    Input in Pipewire link. Inputs may be composed into left/right channels with
+    StereoInput objects.
+
+    Attributes
+    ----------
+    id:             int
+                    Pipewire connector identifier.
+    device:         str
+                    Pipewire device name.
+    name:           str
+                    Pipewire device connector name, (typically uses FL or FR).
+    port_type:      PortType
+                    Designation of connector as an input. Set to PortType.INPUT
+    is_midi:        bool
+                    Indicator to mark that the port is a Midi connection.
+    """
+
+class Output(Port):
+    """
+    Pipewire Link Output Port Object.
+
+    Output in Pipewire link. Outputs may be composed into left/right channels
+    with StereoOutput objects.
+
+    Attributes
+    ----------
+    id:             int
+                    Pipewire connector identifier.
+    device:         str
+                    Pipewire device name.
+    name:           str
+                    Pipewire device connector name, (typically uses FL or FR).
+    port_type:      PortType
+                    Designation of connector as output. Set to PortType.OUTPUT
+    is_midi:        bool
+                    Indicator to mark that the port is a Midi connection.
+    """
+
+@dataclass
+class StereoInput:
+    """
+    Stereo (paired) Pipewire Input Object.
 
     Grouping of left and right channel ports for a Pipewire link input.
 
@@ -173,28 +218,43 @@ class Input:
 
     Attributes
     ----------
-    left:   Port
+    left:   Input
             Left (or mono) channel port.
-    right:  Port
+    right:  Input
             Right channel port.
     """
 
-    left: Port
-    right: Port
+    left: Input
+    right: Input
 
-    def connect(self, output_device: "Output") -> Union["Link", None]:
+    def connect(
+        self,
+        output_device: "StereoOutput"
+    ) -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
-        connections = 0
+        connections = []
         if self.left and output_device.left:
             self.left.connect(output_device.left)
-            connections += 1
+            connections.append(
+                Link(
+                    input=self.left,
+                    output=output_device.left
+                )
+            )
         if self.right and output_device.right:
             self.right.connect(output_device.right)
-            connections += 1
-        if connections > 0:
-            return Link(input=self, output=output_device)
+            connections.append(
+                Link(
+                    input=self.right,
+                    output=output_device.right
+                )
+            )
+        if connections:
+            if len(connections) > 1:
+                return StereoLink(left=connections[0], right=connections[1])
+            return connections
     
-    def disconnect(self, output_device: Union["Output", "Link"]):
+    def disconnect(self, output_device: Union["StereoOutput", "Link"]):
         """Disconnect this input from an output."""
         if self.left and output_device.left:
             self.left.disconnect(output_device.left)
@@ -203,9 +263,9 @@ class Input:
 
 
 @dataclass
-class Output:
+class StereoOutput:
     """
-    Pipewire Output Object.
+    Stereo (paired) Pipewire Output Object.
 
     Grouping of left and right channel ports for a Pipewire link output.
 
@@ -226,33 +286,48 @@ class Output:
     ...         device="alsa.my.device",
     ...         name="FR",
     ...         port_type=link.PortType.OUTPUT
-    ...     )
+    ...     )from
     ... )
 
     Attributes
     ----------
-    left:   Port
+    left:   Output
             Left (or mono) channel port.
-    right:  Port
+    right:  Output
             Right channel port.
     """
 
-    left: Port
-    right: Port
+    left: Output
+    right: Output
 
-    def connect(self, input_device: "Input") -> Union["Link", None]:
+    def connect(
+        self,
+        input_device: "StereoInput"
+    ) -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
-        connections = 0
+        connections = []
         if self.left and input_device.left:
             self.left.connect(input_device.left)
-            connections += 1
+            connections.append(
+                Link(
+                    input=input_device.left,
+                    output=self.left
+                )
+            )
         if self.right and input_device.right:
             self.right.connect(input_device.right)
-            connections += 1
-        if connections > 0:
-            return Link(input=self, output=input_device)
+            connections.append(
+                Link(
+                    input=input_device.right,
+                    output=self.right
+                )
+            )
+        if connections:
+            if len(connections) > 1:
+                return StereoLink(left=connections[0], right=connections[1])
+            return connections
     
-    def disconnect(self, input_device: Union["Input", "Link"]):
+    def disconnect(self, input_device: Union["StereoInput", "Link"]):
         """Disconnect this input from an output."""
         if self.left and input_device.left:
             self.left.disconnect(input_device.left)
@@ -270,9 +345,9 @@ class Link:
     Attributes
     ----------
     input:  Input
-            Pipewire input object connected with link.
+            Pipewire port object acting as input connected with link.
     output: Output
-            Pipewire output object connected with link.
+            Pipewire port object acting as output and connected with link.
     """
 
     input: Input
@@ -282,19 +357,42 @@ class Link:
         """Disconnect the Link."""
         self.input.disconnect(self.output)
 
+@dataclass
+class StereoLink:
+    """
+    Stereo (paired) Pipewire Linked Object.
 
-def _split_id_from_name(command) -> List[List[str]]:
+    Configured Pipewire link between a pair of input and output devices acting
+    as a stereo pair.
+
+    Attributes
+    ----------
+    left:   Link
+            Pipewire link between output and input for left channel.
+    right:  Link
+            Pipewire link between output and input for right channel.
+    """
+
+    left: Link
+    right: Link
+
+    def disconnect(self):
+        """Disconnect the stereo pair of links."""
+        self.left.disconnect()
+        self.right.disconnect()
+
+def _split_id_from_data(command) -> List[List[str]]:
     """Helper function to generate a list of channels"""
     stdout, _ = _execute_shell_command([PW_LINK_COMMAND, command, "--id"])
     data_sets = []
-    for channel in stdout.decode('utf-8').split("\n"):
-        channels = channel.lstrip().split(" ", maxsplit=1)
-        if len(channels) == 2:
-            data_sets.append(channels)
+    for port in stdout.decode('utf-8').split("\n"):
+        ports = port.lstrip().split(" ", maxsplit=1)
+        if len(ports) == 2:
+            data_sets.append([port.strip(" ") for port in ports])
     return data_sets
 
 
-def list_inputs() -> List[Input]:
+def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
     """
     List the Inputs Available on System.
 
@@ -307,51 +405,60 @@ def list_inputs() -> List[Input]:
     pw-link --input --id
     ```
 
+    Parameters
+    ----------
+    pair_stereo:    bool, optional
+                    Control to opt for pairing output ports into their
+                    corresponding stereo pairs (left/right).
+
     Returns
     -------
-    list[Input]:    List of the identified inputs.
+    list[StereoInput | Input]:  List of the identified inputs or stereo input
+                                pairs.
     """
-    channels = []
-    for channel_id, channel_data in _split_id_from_name("--input"):
+    ports = []
+    for channel_id, channel_data in _split_id_from_data("--input"):
         device, name = channel_data.split(':', maxsplit=1)
-        channels.append(
-            Port(
+        ports.append(
+            Input(
                 id=channel_id,
                 device=device,
                 name=name,
-                port_type=PortType.INPUT
+                port_type=PortType.INPUT,
             )
         )
+    if not pair_stereo:
+        return ports
     i = 0
-    num_channels = len(channels)
+    num_ports = len(ports)
     inputs = []
-    # Review the list of Channels to Pair Appropriate Channels into an Input
-    while i < num_channels:
+    # Review the list of ports to Pair Appropriate ports into an Input
+    while i < num_ports:
         i += 1
-        if i+1 <= num_channels:
+        if i+1 <= num_ports:
             # If this channel device is the same as the next channel's device
-            if channels[i].device == channels[i-1].device:
-                # Identify Left and Right Channels
-                if "FL" in channels[i].name.upper():
-                    inputs.append(Input(
-                        left = channels[i],
-                        right = channels[i-1]
+            if ports[i].device == ports[i-1].device:
+                # Identify Left and Right ports
+                if "FL" in ports[i].name.upper():
+                    inputs.append(StereoInput(
+                        left = ports[i],
+                        right = ports[i-1]
                     ))
                     i += 1
                     continue
-                elif "FR" in channels[i].name.upper():
-                    inputs.append(Input(
-                        right = channels[i],
-                        left = channels[i-1]
+                elif "FR" in ports[i].name.upper():
+                    inputs.append(StereoInput(
+                        right = ports[i],
+                        left = ports[i-1]
                     ))
                     i += 1
                     continue
         # Use Left-Channel Only if there's no left/right
-        inputs.append(Input(left=channels[i-1], right=None))
+        inputs.append(ports[i-1])
     return inputs
 
 
-def list_outputs() -> List[Output]:
+def list_outputs(pair_stereo: bool = True) -> List[Union[StereoOutput, Output]]:
     """
     List the Outputs Available on System.
 
@@ -364,51 +471,60 @@ def list_outputs() -> List[Output]:
     pw-link --output --id
     ```
 
+    Parameters
+    ----------
+    pair_stereo:    bool, optional
+                    Control to opt for pairing output ports into their
+                    corresponding stereo pairs (left/right).
+
     Returns
     -------
-    list[Output]:    List of the identified outputs.
+    list[StereoOutput | Output]:    List of the identified outputs or stereo
+                                    output pairs.
     """
-    channels = []
-    for channel_id, channel_data in _split_id_from_name("--output"):
+    ports = []
+    for channel_id, channel_data in _split_id_from_data("--output"):
         device, name = channel_data.split(':', maxsplit=1)
-        channels.append(
-            Port(
+        ports.append(
+            Output(
                 id=channel_id,
                 device=device,
                 name=name,
-                port_type=PortType.OUTPUT
+                port_type=PortType.OUTPUT,
             )
         )
+    if not pair_stereo:
+        return ports
     i = 0
-    num_channels = len(channels)
+    num_ports = len(ports)
     outputs = []
-    # Review the list of Channels to Pair Appropriate Channels into an Output
-    while i < num_channels:
+    # Review the list of ports to Pair Appropriate ports into an Output
+    while i < num_ports:
         i += 1
-        if i+1 <= num_channels:
+        if i+1 <= num_ports:
             # If this channel device is the same as the next channel's device
-            if channels[i].device == channels[i-1].device:
-                # Identify Left and Right Channels
-                if "FL" in channels[i].name.upper():
-                    outputs.append(Output(
-                        left = channels[i],
-                        right = channels[i-1]
+            if ports[i].device == ports[i-1].device:
+                # Identify Left and Right ports
+                if "FL" in ports[i].name.upper():
+                    outputs.append(StereoOutput(
+                        left = ports[i],
+                        right = ports[i-1]
                     ))
                     i += 1
                     continue
-                elif "FR" in channels[i].name.upper():
-                    outputs.append(Output(
-                        right = channels[i],
-                        left = channels[i-1]
+                elif "FR" in ports[i].name.upper():
+                    outputs.append(StereoOutput(
+                        right = ports[i],
+                        left = ports[i-1]
                     ))
                     i += 1
                     continue
         # Use Left-Channel Only if there's no left/right
-        outputs.append(Output(left=channels[i-1], right=None))
+        outputs.append(ports[i-1])
     return outputs
 
 
-def list_links() -> List[Link]:
+def list_links(pair_stereo: bool = True) -> List[Union[StereoLink, Link]]:
     """
     List the Links Available on System.
 
@@ -421,9 +537,95 @@ def list_links() -> List[Link]:
     pw-link --links --id
     ```
 
+    Parameters
+    ----------
+    pair_stereo:    bool, optional
+                    Control to opt for pairing linked ports into their
+                    corresponding stereo pairs (left/right).
+
     Returns
     -------
-    list[Link]:    List of the identified links.
+    list[StereoLink | Link]:    List of the identified links or linked pairs.
     """
-    # TODO
-    stdout, _ = _execute_shell_command([PW_LINK_COMMAND, "--links", "--id"])
+    # Parse STDOUT Data for Port Information
+    link_data_lines = _split_id_from_data("--links")
+    i = 0
+    links = []
+    while i < (len(link_data_lines) - 1):
+        # Determine Direction of Port Link
+        direction, side_b_data = link_data_lines[i+1][1].split(" ", maxsplit=1)
+        # Split Side "A" (first) Port Data
+        side_a_device, side_a_name = link_data_lines[i][1].split(":")
+        side_a_port = Port(
+            device=side_a_device,
+            name=side_a_name,
+            id=link_data_lines[i][0],
+            port_type=PortType.INPUT if direction == "|<-" else PortType.OUTPUT
+        )
+        # Split Side "B" (second) Port Data
+        side_b_id, side_b_data = side_b_data.split(" ", maxsplit=1)
+        side_b_device, side_b_name = side_b_data.split(":")
+        side_b_port = Port(
+            device=side_b_device,
+            name=side_b_name,
+            id=side_b_id,
+            port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT
+        )
+        i += 2
+        if side_a_port.port_type == PortType.INPUT:
+            links.append(Link(input=side_a_port, output=side_b_port))
+        else:
+            links.append(Link(input=side_b_port, output=side_a_port))
+    if not pair_stereo:
+        return links
+    paired_links = []
+    found_devices = []
+    i = 0
+    while i < len(links) - 1:
+        i += 1
+        if links[i-1] not in found_devices:
+            # Load preferring inputs
+            if links[i].input.device == links[i-1].input.device:
+                # record device name to attempt loading output if found again
+                found_devices.append(links[i].input.device)
+                if "FL" in links[i].input.name.upper():
+                    paired_links.append(
+                        StereoLink(
+                            left=links[i],
+                            right=links[i-1]
+                        )
+                    )
+                elif "FR" in links[i].input.name.upper():
+                    paired_links.append(
+                        StereoLink(
+                            left=links[i-1],
+                            right=links[i]
+                        )
+                    )
+                i += 1
+            else:
+                # Fallback
+                paired_links.append(links[i-1])
+        else:
+            # Load preferring outputs
+            if links[i].output.device == links[i-1].output.device:
+                found_devices.append(links[i].output.device)
+                if "FL" in links[i].output.name.upper():
+                    paired_links.append(
+                        StereoLink(
+                            left=links[i],
+                            right=links[i-1]
+                        )
+                    )
+                elif "FR" in links[i].output.name.upper():
+                    paired_links.append(
+                        StereoLink(
+                            left=links[i-1],
+                            right=links[i]
+                        )
+                    )
+                i += 1
+            else:
+                # Fallback
+                paired_links.append(links[i-1])
+    return paired_links
