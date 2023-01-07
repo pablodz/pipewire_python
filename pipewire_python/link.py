@@ -21,12 +21,29 @@ class InvalidLink(ValueError):
     """Invalid link configuration."""
 
 class ChannelType(Enum):
+    """Pipewire Channel Type - Input or Output."""
     INPUT = 1
     OUTPUT = 2
 
 
 @dataclass
 class Channel:
+    """
+    Pipewire Link Channel Object.
+
+    Connect or disconnect Pipewire links with unique individual channels.
+
+    Attributes
+    ----------
+    id:             int
+                    Pipewire channel identifier.
+    device:         str
+                    Pipewire device name.
+    name:           str
+                    Pipewire device channel name, (typically uses L or R).
+    channel_type:   ChannelType
+    """
+
     device: str
     name: str
     id: int
@@ -40,14 +57,14 @@ class Channel:
             if other.channel_type == ChannelType.INPUT:
                 raise InvalidLink(message.format("input"))
             # Valid -- Append the Output (other) First
-            args.append(":".join(other.device, other.name))
-            args.append(":".join(self.device, self.name))
+            args.append(":".join((other.device, other.name)))
+            args.append(":".join((self.device, self.name)))
         else:
             if other.channel_type == ChannelType.OUTPUT:
                 raise InvalidLink(message.format("output"))
             # Valid -- Append the Output (self) First
-            args.append(":".join(self.device, self.name))
-            args.append(":".join(other.device, other.name))
+            args.append(":".join((self.device, self.name)))
+            args.append(":".join((other.device, other.name)))
         return args
 
     def connect(self, other: "Channel"):
@@ -70,6 +87,19 @@ class Channel:
 
 @dataclass
 class Input:
+    """
+    Pipewire Input Object.
+
+    Grouping of left and right channels for a Pipewire link input.
+
+    Attributes
+    ----------
+    left:   Channel
+            Left (or mono) channel.
+    right:  Channel
+            Right channel.
+    """
+
     left: Channel
     right: Channel
 
@@ -85,7 +115,7 @@ class Input:
         if connections > 0:
             return Link(input=self, output=output_device)
     
-    def disconnect(self, output_device: "Output" | "Link"):
+    def disconnect(self, output_device: Union["Output", "Link"]):
         """Disconnect this input from an output."""
         if self.left and output_device.left:
             self.left.disconnect(output_device.left)
@@ -95,6 +125,19 @@ class Input:
 
 @dataclass
 class Output:
+    """
+    Pipewire Output Object.
+
+    Grouping of left and right channels for a Pipewire link output.
+
+    Attributes
+    ----------
+    left:   Channel
+            Left (or mono) channel.
+    right:  Channel
+            Right channel.
+    """
+
     left: Channel
     right: Channel
 
@@ -110,7 +153,7 @@ class Output:
         if connections > 0:
             return Link(input=self, output=input_device)
     
-    def disconnect(self, input_device: "Input" | "Link"):
+    def disconnect(self, input_device: Union["Input", "Link"]):
         """Disconnect this input from an output."""
         if self.left and input_device.left:
             self.left.disconnect(input_device.left)
@@ -120,19 +163,35 @@ class Output:
 
 @dataclass
 class Link:
+    """
+    Pipewire Link Object.
+
+    Configured Pipewire link between an input and output device.
+
+    Attributes
+    ----------
+    input:  Input
+            Pipewire input object connected with link.
+    output: Output
+            Pipewire output object connected with link.
+    """
+
     input: Input
     output: Output
 
     def disconnect(self):
         """Disconnect the Link."""
+        self.input.disconnect(self.output)
 
 
 def _split_id_from_name(command) -> List[List[str]]:
     """Helper function to generate a list of channels"""
     stdout, _ = _execute_shell_command([PW_LINK_COMMAND, command, "--id"])
     data_sets = []
-    for channel in stdout.split("\n"):
-        data_sets.append([data for data in channel if data])
+    for channel in stdout.decode('utf-8').split("\n"):
+        channels = channel.lstrip().split(" ", maxsplit=1)
+        if len(channels) == 2:
+            data_sets.append(channels)
     return data_sets
 
 
@@ -140,7 +199,7 @@ def list_inputs() -> List[Input]:
     """List the Inputs."""
     channels = []
     for channel_id, channel_data in _split_id_from_name("--input"):
-        device, name = channel_data.split(':')
+        device, name = channel_data.split(':', maxsplit=1)
         channels.append(
             Channel(
                 id=channel_id,
@@ -153,26 +212,28 @@ def list_inputs() -> List[Input]:
     num_channels = len(channels)
     inputs = []
     # Review the list of Channels to Pair Appropriate Channels into an Input
-    while i <= num_channels:
+    while i < num_channels:
         i += 1
         if i+1 <= num_channels:
             # If this channel device is the same as the next channel's device
             if channels[i].device == channels[i-1].device:
                 # Identify Left and Right Channels
-                if "L" in channels[i].name.upper():
+                if "FL" in channels[i].name.upper():
                     inputs.append(Input(
                         left = channels[i],
                         right = channels[i-1]
                     ))
-                else:
+                    i += 1
+                    continue
+                elif "FR" in channels[i].name.upper():
                     inputs.append(Input(
                         right = channels[i],
                         left = channels[i-1]
                     ))
-                i += 1
-                continue
+                    i += 1
+                    continue
         # Use Left-Channel Only if there's no left/right
-        inputs.append(Input(left=channels[i], right=None))
+        inputs.append(Input(left=channels[i-1], right=None))
     return inputs
 
 
@@ -180,7 +241,7 @@ def list_outputs() -> List[Output]:
     """List the Outputs."""
     channels = []
     for channel_id, channel_data in _split_id_from_name("--output"):
-        device, name = channel_data.split(':')
+        device, name = channel_data.split(':', maxsplit=1)
         channels.append(
             Channel(
                 id=channel_id,
@@ -193,26 +254,28 @@ def list_outputs() -> List[Output]:
     num_channels = len(channels)
     outputs = []
     # Review the list of Channels to Pair Appropriate Channels into an Output
-    while i <= num_channels:
+    while i < num_channels:
         i += 1
         if i+1 <= num_channels:
             # If this channel device is the same as the next channel's device
             if channels[i].device == channels[i-1].device:
                 # Identify Left and Right Channels
-                if "L" in channels[i].name.upper():
+                if "FL" in channels[i].name.upper():
                     outputs.append(Output(
                         left = channels[i],
                         right = channels[i-1]
                     ))
-                else:
+                    i += 1
+                    continue
+                elif "FR" in channels[i].name.upper():
                     outputs.append(Output(
                         right = channels[i],
                         left = channels[i-1]
                     ))
-                i += 1
-                continue
+                    i += 1
+                    continue
         # Use Left-Channel Only if there's no left/right
-        outputs.append(Output(left=channels[i], right=None))
+        outputs.append(Output(left=channels[i-1], right=None))
     return outputs
 
 

@@ -2,9 +2,10 @@
 requires = ["flit_core >=2,<4"]
 build-backend = "flit_core.buildapi"
 
-[tool.flit.metadata]
-module = "pipewire_python"
+[project]
+name = "pipewire_python"
 author = "Pablo Diaz"
+license = {file = "LICENSE"}
 home-page = "https://github.com/pablodz/pipewire_python"
 requires-python = ">=3.7"
 description = "Python controller, player and recorder via pipewire's commands"
@@ -24,6 +25,9 @@ classifiers = [
 ]
 dynamic = ["version"]
 
+[project.urls]
+Home = "https://github.com/pablodz/pipewire_python"
+Documentation = "https://pablodz.github.io/pipewire_python/html/pipewire_python.html"
 
 [tool.black]
 line-length = 100
