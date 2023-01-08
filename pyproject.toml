@@ -4,7 +4,16 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pipewire_python"
-author = "Pablo Diaz"
+authors = [
+    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"},
+    {name = "Anna Absi", email = "anna.absi@gmail.com"},
+    {name = "Quint van Dijk"},
+    {name = "mrteathyme"},
+    {name = "Joe Stanley",  email = "engineerjoe440@yahoo.com"}
+]
+maintainers = [
+    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"}
+]
 license = {file = "LICENSE"}
 home-page = "https://github.com/pablodz/pipewire_python"
 requires-python = ">=3.7"
