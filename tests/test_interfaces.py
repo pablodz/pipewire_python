@@ -11,7 +11,7 @@ def test_interfaces():
 
     print(list_interfaces_client)
     # check if dict
-    assert type(list_interfaces_client) == dict
+    assert type(list_interfaces_client) is dict
     # not empty dict
     # empty on CI/CD
     assert len(list_interfaces_client) >= 0
@@ -23,7 +23,7 @@ def test_interfaces():
     )
     print(list_interfaces_client)
     # check if dict
-    assert type(list_interfaces_client) == dict
+    assert type(list_interfaces_client) is dict
     # not empty dict
     # empty on CI/CD
     assert len(list_interfaces_client) >= 0
