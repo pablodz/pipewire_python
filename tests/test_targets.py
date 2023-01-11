@@ -9,7 +9,7 @@ def test_interfaces():
 
     print(list_targets_client)
     # check if dict
-    assert type(list_targets_client) == dict
+    assert type(list_targets_client) is dict
     # not empty dict
     # empty on CI/CD
     assert len(list_targets_client) >= 0
