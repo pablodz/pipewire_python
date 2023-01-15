@@ -1,4 +1,6 @@
-from pipewire_python.link import *
+from pipewire_python.link import (
+    list_inputs, list_outputs, list_links, StereoInput, StereoOutput
+)
 
 
 def test_list():

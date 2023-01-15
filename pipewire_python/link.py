@@ -78,6 +78,7 @@ class InvalidLink(ValueError):
 
 class PortType(Enum):
     """Pipewire Channel Type - Input or Output."""
+
     INPUT = 1
     OUTPUT = 2
 
@@ -113,8 +114,10 @@ class Port:
     is_midi: bool = False
 
     def _join_arguments(self, other: "Port", message: str) -> List[str]:
-        """Generate a list of arguments to appropriately set output, then input
-        for the connection/disconnection command."""
+        """
+        Generate a list of arguments to appropriately set output, then input
+        for the connection/disconnection command.
+        """
         args = [PW_LINK_COMMAND]
         if self.port_type == PortType.INPUT:
             if other.port_type == PortType.INPUT:
@@ -130,7 +133,7 @@ class Port:
             args.append(":".join((other.device, other.name)))
         return args
 
-    def connect(self, other: "Port"):
+    def connect(self, other: "Port") -> None:
         """Connect this channel to another channel."""
         args = self._join_arguments(
             other=other,
@@ -138,7 +141,7 @@ class Port:
         )
         _ = _execute_shell_command(args)
 
-    def disconnect(self, other: "Port"):
+    def disconnect(self, other: "Port") -> None:
         """Disconnect this channel from another."""
         args = self._join_arguments(
             other=other,
@@ -146,6 +149,7 @@ class Port:
         )
         args.append("--disconnect")
         _ = _execute_shell_command(args)
+
 
 class Input(Port):
     """
@@ -168,6 +172,7 @@ class Input(Port):
                     Indicator to mark that the port is a Midi connection.
     """
 
+
 class Output(Port):
     """
     Pipewire Link Output Port Object.
@@ -188,6 +193,7 @@ class Output(Port):
     is_midi:        bool
                     Indicator to mark that the port is a Midi connection.
     """
+
 
 @dataclass
 class StereoInput:
@@ -254,7 +260,10 @@ class StereoInput:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
     
-    def disconnect(self, other: Union["StereoOutput", "StereoLink", "Link"]):
+    def disconnect(
+        self,
+        other: Union["StereoOutput", "StereoLink", "Link"]
+    ) -> None:
         """Disconnect this input from an output."""
         if self.left and other.left:
             self.left.disconnect(other.left)
@@ -326,8 +335,11 @@ class StereoOutput:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
-    
-    def disconnect(self, other: Union["StereoInput", "StereoLink", "Link"]):
+
+    def disconnect(
+        self,
+        other: Union["StereoInput", "StereoLink", "Link"]
+    ) -> None:
         """Disconnect this input from an output."""
         if self.left and other.left:
             self.left.disconnect(other.left)
@@ -360,6 +372,7 @@ class Link:
     def reconnect(self):
         """Reconnect the Link if Previously Disconnected."""
         self.input.connect(self.output)
+
 
 @dataclass
 class StereoLink:
@@ -455,7 +468,7 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
                     ))
                     i += 1
                     continue
-                elif "FR" in ports[i].name.upper():
+                if "FR" in ports[i].name.upper():
                     inputs.append(StereoInput(
                         right = ports[i],
                         left = ports[i-1]
@@ -516,15 +529,15 @@ def list_outputs(pair_stereo: bool = True) -> List[Union[StereoOutput, Output]]:
                 # Identify Left and Right ports
                 if "FL" in ports[i].name.upper():
                     outputs.append(StereoOutput(
-                        left = ports[i],
-                        right = ports[i-1]
+                        left=ports[i],
+                        right=ports[i-1]
                     ))
                     i += 1
                     continue
-                elif "FR" in ports[i].name.upper():
+                if "FR" in ports[i].name.upper():
                     outputs.append(StereoOutput(
-                        right = ports[i],
-                        left = ports[i-1]
+                        right=ports[i],
+                        left=ports[i-1]
                     ))
                     i += 1
                     continue
