@@ -76,6 +76,7 @@ PW_LINK_COMMAND = "pw-link"
 class InvalidLink(ValueError):
     """Invalid link configuration."""
 
+
 class PortType(Enum):
     """Pipewire Channel Type - Input or Output."""
 
@@ -259,7 +260,8 @@ class StereoInput:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
-    
+        return None
+
     def disconnect(
         self,
         other: Union["StereoOutput", "StereoLink", "Link"]
@@ -335,6 +337,7 @@ class StereoOutput:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
+        return None
 
     def disconnect(
         self,
@@ -403,6 +406,7 @@ class StereoLink:
         self.left.reconnect()
         self.right.reconnect()
 
+
 def _split_id_from_data(command) -> List[List[str]]:
     """Helper function to generate a list of channels"""
     stdout, _ = _execute_shell_command([PW_LINK_COMMAND, command, "--id"])
@@ -463,15 +467,15 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
                 # Identify Left and Right ports
                 if "FL" in ports[i].name.upper():
                     inputs.append(StereoInput(
-                        left = ports[i],
-                        right = ports[i-1]
+                        left=ports[i],
+                        right=ports[i-1]
                     ))
                     i += 1
                     continue
                 if "FR" in ports[i].name.upper():
                     inputs.append(StereoInput(
-                        right = ports[i],
-                        left = ports[i-1]
+                        right=ports[i],
+                        left=ports[i-1]
                     ))
                     i += 1
                     continue
