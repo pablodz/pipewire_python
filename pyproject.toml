@@ -2,25 +2,40 @@
 requires = ["flit_core >=2,<4"]
 build-backend = "flit_core.buildapi"
 
-[tool.flit.metadata]
-module = "pipewire_python"
-author = "Pablo Diaz"
+[project]
+name = "pipewire_python"
+authors = [
+    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"},
+    {name = "Anna Absi", email = "anna.absi@gmail.com"},
+    {name = "mrteathyme"},
+    {name = "Joe Stanley",  email = "engineerjoe440@yahoo.com"}
+]
+maintainers = [
+    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"}
+]
+license = {file = "LICENSE"}
 home-page = "https://github.com/pablodz/pipewire_python"
 requires-python = ">=3.7"
-description-file = "README.md"
-classifiers = [ "License :: OSI Approved :: MIT License",
-                "Intended Audience :: Developers",
-                "Intended Audience :: Science/Research",
-                "Natural Language :: English",
-                "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
-                "Topic :: Multimedia :: Sound/Audio :: Players",
-                "Programming Language :: Python :: 3.7",
-                "Programming Language :: Python :: 3.8",
-                "Programming Language :: Python :: 3.9",
-                "Programming Language :: Python :: 3.10",
-                "Programming Language :: Python :: 3.11",
-                ]
+description = "Python controller, player and recorder via pipewire's commands"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = ["version"]
 
+[project.urls]
+Home = "https://github.com/pablodz/pipewire_python"
+Documentation = "https://pablodz.github.io/pipewire_python/html/pipewire_python.html"
 
 [tool.black]
 line-length = 100

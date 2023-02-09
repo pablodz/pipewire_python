@@ -1,4 +1,4 @@
-# PIPEWIRE's python controller (wrapper)
+# PIPEWIRE's Python controller (wrapper)
 
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
@@ -46,7 +46,7 @@ pw-cli info 0
 ...
 ```
 
-> To uninstall pipewire [clic here](./docs/UNINSTALL_PIPEWIRE.md).
+> To uninstall pipewire [click here](./docs/UNINSTALL_PIPEWIRE.md).
 
 2.  Python 3.7+
 3.  Ubuntu 20.04+
@@ -95,6 +95,31 @@ audio_controller.get_list_interfaces(
 audio_controller.get_list_interfaces(
     filtered_by_type=False,
 )
+```
+
+#### LINK PORTS
+### Linking Ports
+
+```python
+from pipewire_python import link
+
+inputs = link.list_inputs()
+outputs = link.list_outputs()
+
+# Connect the last output to the last input -- during testing it was found that
+# Midi channel is normally listed first, so this avoids that.
+source = outputs[-1]
+sink = inputs[-1]
+source.connect(sink)
+
+# Fun Fact! You can connect/disconnect in either order!
+sink.disconnect(source) # Tada!
+
+# Default Input/Output links will be made with left-left and right-right
+# connections; in other words, a straight stereo connection.
+# It's possible to manually cross the lines, however!
+source.right.connect(sink.left)
+source.left.connect(sink.right)
 ```
 
 
