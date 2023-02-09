@@ -37,5 +37,3 @@ dynamic = ["version"]
 Home = "https://github.com/pablodz/pipewire_python"
 Documentation = "https://pablodz.github.io/pipewire_python/html/pipewire_python.html"
 
-[tool.black]
-line-length = 100

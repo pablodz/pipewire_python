@@ -1,7 +1,0 @@
-[flake8]
-max-line-length = 120
-max-complexity = 35
-# ignore = E226,E302,E41,E711,E501,F403,F401,C901
-ignore=
-    F401, # Imported but unused
-    W291, # trailing whitespace in docs

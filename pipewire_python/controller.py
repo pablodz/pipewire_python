@@ -5,10 +5,17 @@ In the next pages you'll see documentation of each Python component
 `controller.py`.
 """
 
-import warnings
+# import warnings
+
+# Loading constants Constants.py
+from pipewire_python._constants import (
+    MESSAGES_ERROR,
+    RECOMMENDED_FORMATS,
+    RECOMMENDED_RATES,
+)
 
 # Loading internal functions
-from ._utils import (
+from pipewire_python._utils import (
     _drop_keys_with_none_values,
     _execute_shell_command,
     _filter_by_type,
@@ -17,9 +24,6 @@ from ._utils import (
     _generate_dict_list_targets,
     _get_dict_from_stdout,
 )
-
-# Loading constants Constants.py
-from ._constants import MESSAGES_ERROR, RECOMMENDED_FORMATS, RECOMMENDED_RATES
 
 # [DEPRECATED] [FLAKE8] TO_AVOID_F401 PEP8
 # [DEPRECATED] https://stackoverflow.com/a/31079085/10491422
@@ -103,7 +107,9 @@ class Controller:
         # get default parameters with help
         stdout, _ = _execute_shell_command(command=mycommand, verbose=verbose)  # stderr
         # convert stdout to dictionary
-        dict_default_values = _get_dict_from_stdout(stdout=str(stdout.decode()), verbose=verbose)
+        dict_default_values = _get_dict_from_stdout(
+            stdout=str(stdout.decode()), verbose=verbose
+        )
 
         if verbose:
             print(self._pipewire_configs)
@@ -164,7 +170,9 @@ class Controller:
         if verbose:
             print(f"[mycommand]{mycommand}")
 
-        stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+        stdout, _ = _execute_shell_command(
+            command=mycommand, timeout=-1, verbose=verbose
+        )
         versions = stdout.decode().split("\n")[1:]
 
         self._pipewire_cli["--version"] = versions
@@ -311,7 +319,9 @@ class Controller:
         elif target is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[target='{target}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[target='{target}'] EMPTY VALUE"
+            )
         # 5 - latency
         if latency:
             if any(chr.isdigit() for chr in latency):  # Contain numbers
@@ -323,7 +333,9 @@ class Controller:
         elif latency is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[latency='{latency}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[latency='{latency}'] EMPTY VALUE"
+            )
         # 6 - rate
         if rate:
             if rate in RECOMMENDED_RATES:
@@ -336,7 +348,9 @@ class Controller:
         elif rate is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[rate='{rate}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[rate='{rate}'] EMPTY VALUE"
+            )
         # 7 - channels
         if channels:
             if channels in [1, 2]:  # values
@@ -349,7 +363,9 @@ class Controller:
         elif channels is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[channels='{channels}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[channels='{channels}'] EMPTY VALUE"
+            )
         # 8 - channels-map
         if channels_map:
             self._pipewire_configs["--channels-map"] = str(channels_map)
@@ -371,7 +387,9 @@ class Controller:
         elif _format is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[_format='{_format}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[_format='{_format}'] EMPTY VALUE"
+            )
         # 10 - volume
         if volume:
             if 0.0 <= volume <= 1.0:
@@ -384,7 +402,9 @@ class Controller:
         elif volume is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[volume='{volume}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[volume='{volume}'] EMPTY VALUE"
+            )
         # 11 - quality
         if quality:
             if 0 <= quality <= 15:
@@ -396,7 +416,9 @@ class Controller:
         elif quality is None:
             pass
         else:
-            raise ValueError(f"{MESSAGES_ERROR['ValueError']}[volume='{volume}'] EMPTY VALUE")
+            raise ValueError(
+                f"{MESSAGES_ERROR['ValueError']}[volume='{volume}'] EMPTY VALUE"
+            )
 
         # 12 - verbose cli
         if verbose:  # True
@@ -419,13 +441,17 @@ class Controller:
 
         if mode == "playback":
             mycommand = ["pw-cat", "--playback", "--list-targets"]
-            stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+            stdout, _ = _execute_shell_command(
+                command=mycommand, timeout=-1, verbose=verbose
+            )
             self._pipewire_list_targets["list_playback"] = _generate_dict_list_targets(
                 longstring=stdout.decode(), verbose=verbose
             )
         elif mode == "record":
             mycommand = ["pw-cat", "--record", "--list-targets"]
-            stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+            stdout, _ = _execute_shell_command(
+                command=mycommand, timeout=-1, verbose=verbose
+            )
             self._pipewire_list_targets["list_record"] = _generate_dict_list_targets(
                 longstring=stdout.decode(), verbose=verbose
             )
@@ -503,10 +529,13 @@ class Controller:
         ```
         Args:
             filtered_by_type : If False, returns all. If not, returns a fitered dict
-            type_interfaces : Set type of Interface ["Client","Link","Node","Factory","Module","Metadata","Endpoint","Session","Endpoint Stream","EndpointLink","Port"]
+            type_interfaces : Set type of Interface
+            ["Client","Link","Node","Factory","Module","Metadata","Endpoint",
+            "Session","Endpoint Stream","EndpointLink","Port"]
 
         Returns:
-            - dict_interfaces_filtered: dictionary with list of interfaces matching conditions
+            - dict_interfaces_filtered: dictionary
+            with list of interfaces matching conditions
 
         Examples:
         ```python
@@ -519,8 +548,12 @@ class Controller:
         # if verbose:
         #     print(f"[mycommand]{mycommand}")
 
-        stdout, _ = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
-        dict_interfaces = _generate_dict_interfaces(longstring=stdout.decode(), verbose=verbose)
+        stdout, _ = _execute_shell_command(
+            command=mycommand, timeout=-1, verbose=verbose
+        )
+        dict_interfaces = _generate_dict_interfaces(
+            longstring=stdout.decode(), verbose=verbose
+        )
 
         if filtered_by_type:
             dict_interfaces_filtered = _filter_by_type(
@@ -554,16 +587,20 @@ class Controller:
             - stdout (`str`): Shell response to the command in stdout format
             - stderr (`str`): Shell response response to the command in stderr format
         """
-        warnings.warn("The name of the function may change on future releases", DeprecationWarning)
+        # warnings.warn("The name of the function may change on future releases", DeprecationWarning)
 
-        mycommand = ["pw-cat", "--playback", audio_filename] + _generate_command_by_dict(
-            mydict=self._pipewire_configs, verbose=verbose
-        )
+        mycommand = [
+            "pw-cat",
+            "--playback",
+            audio_filename,
+        ] + _generate_command_by_dict(mydict=self._pipewire_configs, verbose=verbose)
 
         if verbose:
             print(f"[mycommand]{mycommand}")
 
-        stdout, stderr = _execute_shell_command(command=mycommand, timeout=-1, verbose=verbose)
+        stdout, stderr = _execute_shell_command(
+            command=mycommand, timeout=-1, verbose=verbose
+        )
         return stdout, stderr
 
     def record(
@@ -590,7 +627,7 @@ class Controller:
             - stdout (`str`): Shell response to the command in stdout format
             - stderr (`str`): Shell response response to the command in stderr format
         """
-        warnings.warn("The name of the function may change on future releases", DeprecationWarning)
+        # warnings.warn("The name of the function may change on future releases", DeprecationWarning)
 
         mycommand = ["pw-cat", "--record", audio_filename] + _generate_command_by_dict(
             mydict=self._pipewire_configs, verbose=verbose

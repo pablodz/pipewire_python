@@ -47,11 +47,11 @@ Examples
 >>> source.left.connect(sink.right)
 """
 
-from typing import List, Union
 from dataclasses import dataclass
 from enum import Enum
+from typing import List, Union
 
-from ._utils import (
+from pipewire_python._utils import (
     _execute_shell_command,
 )
 
@@ -136,18 +136,12 @@ class Port:
 
     def connect(self, other: "Port") -> None:
         """Connect this channel to another channel."""
-        args = self._join_arguments(
-            other=other,
-            message="Cannot connect an {} to another {}."
-        )
+        args = self._join_arguments(other=other, message="Cannot connect an {} to another {}.")
         _ = _execute_shell_command(args)
 
     def disconnect(self, other: "Port") -> None:
         """Disconnect this channel from another."""
-        args = self._join_arguments(
-            other=other,
-            message="Cannot disconnect an {} from another {}."
-        )
+        args = self._join_arguments(other=other, message="Cannot disconnect an {} from another {}.")
         args.append("--disconnect")
         _ = _execute_shell_command(args)
 
@@ -234,38 +228,22 @@ class StereoInput:
     left: Input
     right: Input
 
-    def connect(
-        self,
-        other: "StereoOutput"
-    ) -> Union["StereoLink", "Link", None]:
+    def connect(self, other: "StereoOutput") -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
         if self.left and other.left:
             self.left.connect(other.left)
-            connections.append(
-                Link(
-                    input=self.left,
-                    output=other.left
-                )
-            )
+            connections.append(Link(input=self.left, output=other.left))
         if self.right and other.right:
             self.right.connect(other.right)
-            connections.append(
-                Link(
-                    input=self.right,
-                    output=other.right
-                )
-            )
+            connections.append(Link(input=self.right, output=other.right))
         if connections:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
         return None
 
-    def disconnect(
-        self,
-        other: Union["StereoOutput", "StereoLink", "Link"]
-    ) -> None:
+    def disconnect(self, other: Union["StereoOutput", "StereoLink", "Link"]) -> None:
         """Disconnect this input from an output."""
         if self.left and other.left:
             self.left.disconnect(other.left)
@@ -311,38 +289,22 @@ class StereoOutput:
     left: Output
     right: Output
 
-    def connect(
-        self,
-        other: "StereoInput"
-    ) -> Union["StereoLink", "Link", None]:
+    def connect(self, other: "StereoInput") -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
         if self.left and other.left:
             self.left.connect(other.left)
-            connections.append(
-                Link(
-                    input=other.left,
-                    output=self.left
-                )
-            )
+            connections.append(Link(input=other.left, output=self.left))
         if self.right and other.right:
             self.right.connect(other.right)
-            connections.append(
-                Link(
-                    input=other.right,
-                    output=self.right
-                )
-            )
+            connections.append(Link(input=other.right, output=self.right))
         if connections:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
             return connections
         return None
 
-    def disconnect(
-        self,
-        other: Union["StereoInput", "StereoLink", "Link"]
-    ) -> None:
+    def disconnect(self, other: Union["StereoInput", "StereoLink", "Link"]) -> None:
         """Disconnect this input from an output."""
         if self.left and other.left:
             self.left.disconnect(other.left)
@@ -411,7 +373,7 @@ def _split_id_from_data(command) -> List[List[str]]:
     """Helper function to generate a list of channels"""
     stdout, _ = _execute_shell_command([PW_LINK_COMMAND, command, "--id"])
     data_sets = []
-    for port in stdout.decode('utf-8').split("\n"):
+    for port in stdout.decode("utf-8").split("\n"):
         ports = port.lstrip().split(" ", maxsplit=1)
         if len(ports) == 2:
             data_sets.append([port.strip(" ") for port in ports])
@@ -443,8 +405,13 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
                                 pairs.
     """
     ports = []
+    
+    inputs=_split_id_from_data("--input")
+    if len(inputs) == 0:
+        return ports
+    
     for channel_id, channel_data in _split_id_from_data("--input"):
-        device, name = channel_data.split(':', maxsplit=1)
+        device, name = channel_data.split(":", maxsplit=1)
         ports.append(
             Input(
                 id=channel_id,
@@ -461,26 +428,20 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
     # Review the list of ports to Pair Appropriate ports into an Input
     while i < num_ports:
         i += 1
-        if i+1 <= num_ports:
+        if i + 1 <= num_ports:
             # If this channel device is the same as the next channel's device
-            if ports[i].device == ports[i-1].device:
+            if ports[i].device == ports[i - 1].device:
                 # Identify Left and Right ports
                 if "FL" in ports[i].name.upper():
-                    inputs.append(StereoInput(
-                        left=ports[i],
-                        right=ports[i-1]
-                    ))
+                    inputs.append(StereoInput(left=ports[i], right=ports[i - 1]))
                     i += 1
                     continue
                 if "FR" in ports[i].name.upper():
-                    inputs.append(StereoInput(
-                        right=ports[i],
-                        left=ports[i-1]
-                    ))
+                    inputs.append(StereoInput(right=ports[i], left=ports[i - 1]))
                     i += 1
                     continue
         # Use Left-Channel Only if there's no left/right
-        inputs.append(ports[i-1])
+        inputs.append(ports[i - 1])
     return inputs
 
 
@@ -510,7 +471,7 @@ def list_outputs(pair_stereo: bool = True) -> List[Union[StereoOutput, Output]]:
     """
     ports = []
     for channel_id, channel_data in _split_id_from_data("--output"):
-        device, name = channel_data.split(':', maxsplit=1)
+        device, name = channel_data.split(":", maxsplit=1)
         ports.append(
             Output(
                 id=channel_id,
@@ -527,26 +488,20 @@ def list_outputs(pair_stereo: bool = True) -> List[Union[StereoOutput, Output]]:
     # Review the list of ports to Pair Appropriate ports into an Output
     while i < num_ports:
         i += 1
-        if i+1 <= num_ports:
+        if i + 1 <= num_ports:
             # If this channel device is the same as the next channel's device
-            if ports[i].device == ports[i-1].device:
+            if ports[i].device == ports[i - 1].device:
                 # Identify Left and Right ports
                 if "FL" in ports[i].name.upper():
-                    outputs.append(StereoOutput(
-                        left=ports[i],
-                        right=ports[i-1]
-                    ))
+                    outputs.append(StereoOutput(left=ports[i], right=ports[i - 1]))
                     i += 1
                     continue
                 if "FR" in ports[i].name.upper():
-                    outputs.append(StereoOutput(
-                        right=ports[i],
-                        left=ports[i-1]
-                    ))
+                    outputs.append(StereoOutput(right=ports[i], left=ports[i - 1]))
                     i += 1
                     continue
         # Use Left-Channel Only if there's no left/right
-        outputs.append(ports[i-1])
+        outputs.append(ports[i - 1])
     return outputs
 
 
@@ -579,14 +534,14 @@ def list_links(pair_stereo: bool = True) -> List[Union[StereoLink, Link]]:
     links = []
     while i < (len(link_data_lines) - 1):
         # Determine Direction of Port Link
-        direction, side_b_data = link_data_lines[i+1][1].split(" ", maxsplit=1)
+        direction, side_b_data = link_data_lines[i + 1][1].split(" ", maxsplit=1)
         # Split Side "A" (first) Port Data
         side_a_device, side_a_name = link_data_lines[i][1].split(":")
         side_a_port = Port(
             device=side_a_device,
             name=side_a_name,
             id=link_data_lines[i][0],
-            port_type=PortType.INPUT if direction == "|<-" else PortType.OUTPUT
+            port_type=PortType.INPUT if direction == "|<-" else PortType.OUTPUT,
         )
         # Split Side "B" (second) Port Data
         side_b_id, side_b_data = side_b_data.split(" ", maxsplit=1)
@@ -595,7 +550,7 @@ def list_links(pair_stereo: bool = True) -> List[Union[StereoLink, Link]]:
             device=side_b_device,
             name=side_b_name,
             id=side_b_id,
-            port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT
+            port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT,
         )
         i += 2
         if side_a_port.port_type == PortType.INPUT:
@@ -609,49 +564,29 @@ def list_links(pair_stereo: bool = True) -> List[Union[StereoLink, Link]]:
     i = 0
     while i < len(links) - 1:
         i += 1
-        if links[i-1] not in found_devices:
+        if links[i - 1] not in found_devices:
             # Load preferring inputs
-            if links[i].input.device == links[i-1].input.device:
+            if links[i].input.device == links[i - 1].input.device:
                 # record device name to attempt loading output if found again
                 found_devices.append(links[i].input.device)
                 if "FL" in links[i].input.name.upper():
-                    paired_links.append(
-                        StereoLink(
-                            left=links[i],
-                            right=links[i-1]
-                        )
-                    )
+                    paired_links.append(StereoLink(left=links[i], right=links[i - 1]))
                 elif "FR" in links[i].input.name.upper():
-                    paired_links.append(
-                        StereoLink(
-                            left=links[i-1],
-                            right=links[i]
-                        )
-                    )
+                    paired_links.append(StereoLink(left=links[i - 1], right=links[i]))
                 i += 1
             else:
                 # Fallback
-                paired_links.append(links[i-1])
+                paired_links.append(links[i - 1])
         else:
             # Load preferring outputs
-            if links[i].output.device == links[i-1].output.device:
+            if links[i].output.device == links[i - 1].output.device:
                 found_devices.append(links[i].output.device)
                 if "FL" in links[i].output.name.upper():
-                    paired_links.append(
-                        StereoLink(
-                            left=links[i],
-                            right=links[i-1]
-                        )
-                    )
+                    paired_links.append(StereoLink(left=links[i], right=links[i - 1]))
                 elif "FR" in links[i].output.name.upper():
-                    paired_links.append(
-                        StereoLink(
-                            left=links[i-1],
-                            right=links[i]
-                        )
-                    )
+                    paired_links.append(StereoLink(left=links[i - 1], right=links[i]))
                 i += 1
             else:
                 # Fallback
-                paired_links.append(links[i-1])
+                paired_links.append(links[i - 1])
     return paired_links

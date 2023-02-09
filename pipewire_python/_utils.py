@@ -8,7 +8,7 @@ import subprocess
 from typing import Dict, List
 
 # Loading constants Constants.py
-from ._constants import MESSAGES_ERROR
+from pipewire_python._constants import MESSAGES_ERROR
 
 
 def _print_std(
@@ -57,7 +57,9 @@ def _update_dict_by_dict(
     Update values of one dictionary with values of another dictionary
     based on keys
     """
-    return main_dict.update(([(key, secondary_dict[key]) for key in secondary_dict.keys()]))
+    return main_dict.update(
+        ([(key, secondary_dict[key]) for key in secondary_dict.keys()])
+    )
 
 
 def _drop_keys_with_none_values(main_dict: dict):

@@ -1,5 +1,4 @@
 .DEFAULT_GOAL := help
-.PHONY: coverage deps help lint publish push test tox
 
 apt-packages-ubuntu: ## Install packages needed
 	sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream -y
@@ -9,17 +8,6 @@ apt-packages-ubuntu: ## Install packages needed
 deps:  ## Install dependencies
 	python -m pip install --upgrade pip
 	python -m pip install black coverage flake8 flit mccabe mypy pylint pytest pytest-cov tox tox-gh-actions
-
-# coverage:  ## Run tests with coverage
-# 	python -m coverage erase
-# 	python -m coverage run --include=pipewire_python/* -m pytest -ra
-# 	python -m coverage report -m
-# 	python -m coverage xml
-
-# lint:  ## Lint and static-check
-# 	python -m flake8 pipewire_python
-# 	python -m pylint pipewire_python
-# 	python -m mypy pipewire_python
 
 publish:  ## Publish to PyPi
 	python -m flit publish
@@ -33,3 +21,6 @@ test:  ## Run tests [LOCALHOST]
 tox:  ## Run tox
 	python3 -m tox
 	ls -la
+
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

@@ -12,14 +12,16 @@ Flatpak we expect PipeWire to provide a core building block
 for the future of Linux application development.
 
 [pipewire_python](https://pypi.org/project/pipewire_python/) 
-controlls `pipewire` via terminal, creating shell commands and executing them as required.
+controlls `pipewire` via terminal, creating shell commands 
+and executing them as required.
 
 🎹 There are two ways to manage the python package:
 
 1. NO_ASYNC: this way works as expected with delay time between 
 `pipewire_python` and the rest of your code.
 
-2. ASYNC: [⚠️Not yet implemented] this way works delegating the task to record or to play
+2. ASYNC: [⚠️Not yet implemented] this way works delegating
+the task to record or to play
 a song file in background. Works with threads.
 
 3. MULTIPROCESS: [⚠️Not yet implemented] Works with processes.
