@@ -228,15 +228,21 @@ class StereoInput:
     left: Input
     right: Input
 
+    @property
+    def device(self) -> Union[str, None]:
+        """Determine the Device Associated with this Stereo Input."""
+        if self.left.device == self.right.device:
+            return self.right.device
+
     def connect(self, other: "StereoOutput") -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
         if self.left and other.left:
             self.left.connect(other.left)
-            connections.append(Link(input=self.left, output=other.left))
+            connections.append(Link(inputs=[self.left], outputs=[other.left]))
         if self.right and other.right:
             self.right.connect(other.right)
-            connections.append(Link(input=self.right, output=other.right))
+            connections.append(Link(inputs=[self.right], outputs=[other.right]))
         if connections:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
@@ -289,15 +295,21 @@ class StereoOutput:
     left: Output
     right: Output
 
+    @property
+    def device(self) -> Union[str, None]:
+        """Determine the Device Associated with this Stereo Output."""
+        if self.left.device == self.right.device:
+            return self.right.device
+
     def connect(self, other: "StereoInput") -> Union["StereoLink", "Link", None]:
         """Connect this input to an output."""
         connections = []
         if self.left and other.left:
             self.left.connect(other.left)
-            connections.append(Link(input=other.left, output=self.left))
+            connections.append(Link(inputs=[other.left], outputs=[self.left]))
         if self.right and other.right:
             self.right.connect(other.right)
-            connections.append(Link(input=other.right, output=self.right))
+            connections.append(Link(inputs=[other.right], outputs=[self.right]))
         if connections:
             if len(connections) > 1:
                 return StereoLink(left=connections[0], right=connections[1])
@@ -321,22 +333,26 @@ class Link:
 
     Attributes
     ----------
-    input:  Input
-            Pipewire port object acting as input connected with link.
-    output: Output
-            Pipewire port object acting as output and connected with link.
+    inputs:     Input
+                Pipewire port object acting as input connected with link.
+    outputs:    Output
+                Pipewire port object acting as output and connected with link.
     """
 
-    input: Input
-    output: Output
+    inputs: List[Input]
+    outputs: List[Output]
 
     def disconnect(self):
         """Disconnect the Link."""
-        self.input.disconnect(self.output)
+        for input in self.inputs:
+            for output in self.outputs:
+                input.disconnect(output)
 
     def reconnect(self):
         """Reconnect the Link if Previously Disconnected."""
-        self.input.connect(self.output)
+        for input in self.inputs:
+            for output in self.outputs:
+                input.connect(output)
 
 
 @dataclass
@@ -357,6 +373,26 @@ class StereoLink:
 
     left: Link
     right: Link
+
+    @property
+    def inputs(self) -> List[StereoInput]:
+        """Provide a StereoInput Object Representing the L/R Input Pair."""
+        inputs = []
+        for left, right in zip(self.left.inputs, self.right.inputs):
+            inputs.append(
+                StereoInput(left=left, right=right)
+            )
+        return inputs
+
+    @property
+    def outputs(self) -> StereoOutput:
+        """Provide a StereoInput Object Representing the L/R Output Pair."""
+        outputs = []
+        for left, right in zip(self.left.outputs, self.right.outputs):
+            outputs.append(
+                StereoOutput(left=left, right=right)
+            )
+        return outputs
 
     def disconnect(self):
         """Disconnect the stereo pair of links."""
@@ -405,11 +441,11 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
                                 pairs.
     """
     ports = []
-    
+
     inputs=_split_id_from_data("--input")
     if len(inputs) == 0:
         return ports
-    
+
     for channel_id, channel_data in _split_id_from_data("--input"):
         device, name = channel_data.split(":", maxsplit=1)
         ports.append(
@@ -533,30 +569,38 @@ def list_links(pair_stereo: bool = True) -> List[Union[StereoLink, Link]]:
     i = 0
     links = []
     while i < (len(link_data_lines) - 1):
-        # Determine Direction of Port Link
-        direction, side_b_data = link_data_lines[i + 1][1].split(" ", maxsplit=1)
+        side_b_ports = []
         # Split Side "A" (first) Port Data
         side_a_device, side_a_name = link_data_lines[i][1].split(":")
+        # Determine Direction of Port Link
+        direction = link_data_lines[i + 1][1].split(" ", maxsplit=1)[0]
         side_a_port = Port(
             device=side_a_device,
             name=side_a_name,
             id=link_data_lines[i][0],
             port_type=PortType.INPUT if direction == "|<-" else PortType.OUTPUT,
         )
-        # Split Side "B" (second) Port Data
-        side_b_id, side_b_data = side_b_data.split(" ", maxsplit=1)
-        side_b_device, side_b_name = side_b_data.split(":")
-        side_b_port = Port(
-            device=side_b_device,
-            name=side_b_name,
-            id=side_b_id,
-            port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT,
-        )
-        i += 2
+        i += 1
+        while i < (len(link_data_lines) - 1):
+            # Split Side "B" (second) Port Data
+            side_b_data = link_data_lines[i][1].split(" ", maxsplit=1)[1]
+            side_b_id, side_b_data = side_b_data.split(" ", maxsplit=1)
+            side_b_device, side_b_name = side_b_data.split(":")
+            side_b_ports.append(Port(
+                device=side_b_device,
+                name=side_b_name,
+                id=side_b_id,
+                port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT,
+            ))
+            i += 1
+            # Determine if Next Line is Associated with this Link
+            if (not "|->" in link_data_lines[i][1] and
+                not "|<-" in link_data_lines[i][1]):
+                break # Continue to Next Link Group
         if side_a_port.port_type == PortType.INPUT:
-            links.append(Link(input=side_a_port, output=side_b_port))
+            links.append(Link(inputs=[side_a_port], outputs=side_b_ports))
         else:
-            links.append(Link(input=side_b_port, output=side_a_port))
+            links.append(Link(inputs=side_b_ports, outputs=[side_a_port]))
     if not pair_stereo:
         return links
     paired_links = []
