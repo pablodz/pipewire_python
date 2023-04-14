@@ -344,15 +344,15 @@ class Link:
 
     def disconnect(self):
         """Disconnect the Link."""
-        for input in self.inputs:
-            for output in self.outputs:
-                input.disconnect(output)
+        for input_obj in self.inputs:
+            for output_obj in self.outputs:
+                input_obj.disconnect(output_obj)
 
     def reconnect(self):
         """Reconnect the Link if Previously Disconnected."""
-        for input in self.inputs:
-            for output in self.outputs:
-                input.connect(output)
+        for input_obj in self.inputs:
+            for output_obj in self.outputs:
+                input_obj.connect(output_obj)
 
 
 @dataclass
