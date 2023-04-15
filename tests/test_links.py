@@ -1,5 +1,6 @@
 from pipewire_python.link import (
-    list_inputs, list_outputs, list_links, StereoInput, StereoOutput
+    list_inputs, list_outputs, list_links, list_link_groups,
+    StereoInput, StereoOutput
 )
 
 
@@ -12,6 +13,7 @@ def test_list():
     assert list_inputs()
     assert list_outputs()
     assert list_links()
+    assert list_link_groups()
 
     # Disconnect everything
     for in_dev in list_inputs():

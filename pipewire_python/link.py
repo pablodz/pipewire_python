@@ -76,6 +76,9 @@ PW_LINK_COMMAND = "pw-link"
 class InvalidLink(ValueError):
     """Invalid link configuration."""
 
+class FailedToLinkPorts(ValueError):
+    """Failed to Link the Specified Ports."""
+
 
 class PortType(Enum):
     """Pipewire Channel Type - Input or Output."""
@@ -137,7 +140,9 @@ class Port:
     def connect(self, other: "Port") -> None:
         """Connect this channel to another channel."""
         args = self._join_arguments(other=other, message="Cannot connect an {} to another {}.")
-        _ = _execute_shell_command(args)
+        stdout, _ = _execute_shell_command(args)
+        if b"failed to link ports" in stdout:
+            raise FailedToLinkPorts(stdout)
 
     def disconnect(self, other: "Port") -> None:
         """Disconnect this channel from another."""
