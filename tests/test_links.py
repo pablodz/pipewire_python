@@ -1,14 +1,18 @@
 from pipewire_python.link import (
-    list_inputs, list_outputs, list_links, list_link_groups,
-    StereoInput, StereoOutput
+    list_inputs,
+    list_outputs,
+    list_links,
+    list_link_groups,
+    StereoInput,
+    StereoOutput,
 )
 
 
 def test_list():
     """Test that the lists provide some devices and that disconnecting clears them."""
-    inputs=list_inputs()
+    inputs = list_inputs()
     if len(inputs) == 0:
-        return # No inputs, no point in testing
+        return  # No inputs, no point in testing
 
     assert list_inputs()
     assert list_outputs()
@@ -22,6 +26,7 @@ def test_list():
                 in_dev.disconnect(out_dev)
 
     assert len(list_links()) == 0
+
 
 def test_connect_disconnect():
     """Test that all points quickly connect then disconnect."""

@@ -8,6 +8,7 @@ from pipewire_python.controller import Controller
 # with open("beers.wav", 'w') as file:
 #     file.write(response.text)
 
+
 #########################
 # PLAYBACK              #
 #########################

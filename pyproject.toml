@@ -5,13 +5,13 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "pipewire_python"
 authors = [
-    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"},
+    {name = "Pablo Diaz"},
     {name = "Anna Absi", email = "anna.absi@gmail.com"},
     {name = "mrteathyme"},
     {name = "Joe Stanley",  email = "engineerjoe440@yahoo.com"}
 ]
 maintainers = [
-    {name = "Pablo Diaz", email = "pablo.diazv@pucp.edu.pe"}
+    {name = "Pablo Diaz"}
 ]
 license = {file = "LICENSE"}
 home-page = "https://github.com/pablodz/pipewire_python"

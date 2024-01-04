@@ -76,6 +76,7 @@ PW_LINK_COMMAND = "pw-link"
 class InvalidLink(ValueError):
     """Invalid link configuration."""
 
+
 class FailedToLinkPorts(ValueError):
     """Failed to Link the Specified Ports."""
 
@@ -139,14 +140,18 @@ class Port:
 
     def connect(self, other: "Port") -> None:
         """Connect this channel to another channel."""
-        args = self._join_arguments(other=other, message="Cannot connect an {} to another {}.")
+        args = self._join_arguments(
+            other=other, message="Cannot connect an {} to another {}."
+        )
         stdout, _ = _execute_shell_command(args)
         if b"failed to link ports" in stdout:
             raise FailedToLinkPorts(stdout)
 
     def disconnect(self, other: "Port") -> None:
         """Disconnect this channel from another."""
-        args = self._join_arguments(other=other, message="Cannot disconnect an {} from another {}.")
+        args = self._join_arguments(
+            other=other, message="Cannot disconnect an {} from another {}."
+        )
         args.append("--disconnect")
         _ = _execute_shell_command(args)
 
@@ -480,7 +485,7 @@ def list_inputs(pair_stereo: bool = True) -> List[Union[StereoInput, Input]]:
     """
     ports = []
 
-    inputs=_split_id_from_data("--input")
+    inputs = _split_id_from_data("--input")
     if len(inputs) == 0:
         return ports
 
@@ -624,25 +629,32 @@ def list_links() -> List[Link]:
                 port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT,
             )
             if side_a_port.port_type == PortType.INPUT:
-                links.append(Link(
-                    input=side_a_port,
-                    output=side_b_port,
-                    id=int(link_data_lines[i][0])
-                ))
+                links.append(
+                    Link(
+                        input=side_a_port,
+                        output=side_b_port,
+                        id=int(link_data_lines[i][0]),
+                    )
+                )
             else:
-                links.append(Link(
-                    input=side_b_port,
-                    output=side_a_port,
-                    id=int(link_data_lines[i][0])
-                ))
+                links.append(
+                    Link(
+                        input=side_b_port,
+                        output=side_a_port,
+                        id=int(link_data_lines[i][0]),
+                    )
+                )
             i += 1
             if i == num_link_lines:
                 break
             # Determine if Next Line is Associated with this Link
-            if (not "|->" in link_data_lines[i][1] and
-                not "|<-" in link_data_lines[i][1]):
-                break # Continue to Next Link Group
+            if (
+                "|->" not in link_data_lines[i][1]
+                and "|<-" not in link_data_lines[i][1]
+            ):
+                break  # Continue to Next Link Group
     return links
+
 
 def list_link_groups() -> List[LinkGroup]:
     """
@@ -691,29 +703,31 @@ def list_link_groups() -> List[LinkGroup]:
                 port_type=PortType.OUTPUT if direction == "|<-" else PortType.INPUT,
             )
             if side_a_port.port_type == PortType.INPUT:
-                links.append(Link(
-                    input=side_a_port,
-                    output=side_b_port,
-                    id=int(link_data_lines[i][0])
-                ))
+                links.append(
+                    Link(
+                        input=side_a_port,
+                        output=side_b_port,
+                        id=int(link_data_lines[i][0]),
+                    )
+                )
             else:
-                links.append(Link(
-                    input=side_b_port,
-                    output=side_a_port,
-                    id=int(link_data_lines[i][0])
-                ))
+                links.append(
+                    Link(
+                        input=side_b_port,
+                        output=side_a_port,
+                        id=int(link_data_lines[i][0]),
+                    )
+                )
             i += 1
             if i == num_link_lines:
                 break
             # Determine if Next Line is Associated with this Link
-            if (not "|->" in link_data_lines[i][1] and
-                not "|<-" in link_data_lines[i][1]):
-                break # Continue to Next Link Group
+            if (
+                "|->" not in link_data_lines[i][1]
+                and "|<-" not in link_data_lines[i][1]
+            ):
+                break  # Continue to Next Link Group
         link_groups.append(
-            LinkGroup(
-                common_device=side_a_device,
-                common_name=side_a_name,
-                links=links
-            )
+            LinkGroup(common_device=side_a_device, common_name=side_a_name, links=links)
         )
     return link_groups

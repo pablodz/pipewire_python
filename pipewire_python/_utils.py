@@ -111,7 +111,9 @@ def _execute_shell_command(
     # )
 
     with subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT  # Example ['ls ','l']
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,  # Example ['ls ','l']
     ) as terminal_subprocess:
         # Execute command depending or not in timeout
         try:
@@ -246,7 +248,7 @@ def _generate_dict_interfaces(
 
                     data = line.replace("\t  ", "").split(" ")
                     third_level = str(data[0])
-                    if type(mydict[first_level]["params"]) != dict:
+                    if not isinstance(mydict[first_level]["params"], dict):
                         mydict[first_level]["params"] = {}
                     mydict[first_level]["params"][third_level] = {
                         "spa": data[1],

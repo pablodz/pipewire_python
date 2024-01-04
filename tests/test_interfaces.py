@@ -2,7 +2,6 @@ from pipewire_python.controller import Controller
 
 
 def test_interfaces():
-
     # Client
     audio_controller = Controller()
     list_interfaces_client = audio_controller.get_list_interfaces(
@@ -11,7 +10,9 @@ def test_interfaces():
 
     print(list_interfaces_client)
     # check if dict
-    assert type(list_interfaces_client) is dict
+    assert isinstance(
+        list_interfaces_client, dict
+    ), "list_interfaces_client should be of type dict"
     # not empty dict
     # empty on CI/CD
     assert len(list_interfaces_client) >= 0
@@ -23,7 +24,9 @@ def test_interfaces():
     )
     print(list_interfaces_client)
     # check if dict
-    assert type(list_interfaces_client) is dict
+    assert isinstance(
+        list_interfaces_client, dict
+    ), "list_interfaces_client should be of type dict"
     # not empty dict
     # empty on CI/CD
     assert len(list_interfaces_client) >= 0
