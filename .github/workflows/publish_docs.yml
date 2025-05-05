@@ -8,7 +8,7 @@ on:
     branches: [main]
 jobs:
   publish-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3
