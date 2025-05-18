@@ -128,14 +128,14 @@ class Port:
             if other.port_type == PortType.INPUT:
                 raise InvalidLink(message.format("input"))
             # Valid -- Append the Output (other) First
-            args.append(":".join((other.device, other.name)))
-            args.append(":".join((self.device, self.name)))
+            args.append(str(other.id))
+            args.append(str(self.id))
         else:
             if other.port_type == PortType.OUTPUT:
                 raise InvalidLink(message.format("output"))
             # Valid -- Append the Output (self) First
-            args.append(":".join((self.device, self.name)))
-            args.append(":".join((other.device, other.name)))
+            args.append(str(self.id))
+            args.append(str(other.id))
         return args
 
     def connect(self, other: "Port") -> None:
